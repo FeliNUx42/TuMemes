@@ -6,9 +6,11 @@
 
 main .search-result {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 280px);
   grid-column-gap: 30px;
   grid-row-gap: 50px;
+  justify-content: center;
+  margin: auto;
 }
 
 main .search-result .user-banner {
@@ -59,4 +61,16 @@ main .search-result .user-banner i.fas {
   font-size: 26px;
   transform: rotate3d(1, 1, 1, 360deg);
   color: #c00;
+}
+
+@media (max-width: 1280px) {
+  main .search-result {
+    grid-template-columns: repeat(3, 280px);
+  }
+}
+
+@media (max-width: 900px) {
+  main .search-result {
+    grid-template-columns: repeat(2, 280px);
+  }
 }
