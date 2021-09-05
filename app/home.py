@@ -18,7 +18,13 @@ home = Blueprint('home', __name__)
 
 @home.route('/')
 def index():
-  return render_template("main/home.html")
+  search = request.args.get("search")
+  page = request.args.get("page", 1, type=int)
+  per_page = request.args.get("per-page", current_app.config['RESULTS_PER_PAGE'], type=int)
+
+  result = User.query.order_by(User.created.desc()).paginate(page, per_page, True)
+
+  return render_template("main/home.html", result=result)
 
 @home.route("/about")
 def about():

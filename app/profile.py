@@ -95,3 +95,9 @@ def settings(username):
     
 
   return render_template("profile/settings.html")
+
+
+@profile.route('/<username>/match', methods=['POST'])
+@login_required
+def match(username):
+  return "hello"

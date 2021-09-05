@@ -20,6 +20,23 @@ function expandSearch() {
   document.querySelector("main .search form").classList.toggle("expand");
 }
 
+// make a match
+const hearts = document.querySelectorAll(".match")
+hearts.forEach(heart => {
+  heart.addEventListener("click", () => {
+    heart.classList.toggle("fas");
+    heart.classList.toggle("far");
+
+    let req = new XMLHttpRequest();
+    let url = heart.attributes.url.value;
+    let param = heart.attributes.param.value;
+
+    req.open("POST", url, true)
+    req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    req.send(param);
+  });
+})
+
 
 /*
 // grow textarea for creating / editing Post

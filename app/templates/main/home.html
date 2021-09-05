@@ -5,7 +5,7 @@
 {% block content %}
   <div class="search">
     <h1 onclick="expandSearch()"><i class="fas fa-search"></i> Find the perfect match</h1>
-    <form action="" method="GET">
+    <form action="" method="POST">
       <div>
         <label for="name">Full Name contains</label>
         <input type="text" name="name" id="name" placeholder="Enter name">
@@ -37,10 +37,10 @@
         <label for="city">City</label>
         <input type="text" name="city" id="city" placeholder="Enter city">
       </div>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button type="submit"><i class="fas fa-search"></i> &nbsp; Search</button>
     </form>
   </div>
-  <h1>Results ():</h1>
-  { include 'layout/search_result.html' %}
+  {% include 'layout/search_result.html' %}
   
 {% endblock content %}
