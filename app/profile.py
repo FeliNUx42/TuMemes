@@ -100,4 +100,9 @@ def settings(username):
 @profile.route('/<username>/match', methods=['POST'])
 @login_required
 def match(username):
-  return "hello"
+  user = User.query.filter_by(username=username).first_or_404()
+
+  if current_user != user:
+    abort(403)
+
+  target_username = request.form.get("")
