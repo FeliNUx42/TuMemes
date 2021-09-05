@@ -8,4 +8,5 @@ app/static/profile_pictures/*
 !app/static/profile_pictures/default.png
 !app/static/profile_pictures/nobody.png
 app/static/descriptions/*
+!app/static/descriptions/meme.png
 
