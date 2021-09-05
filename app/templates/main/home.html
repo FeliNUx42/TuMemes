@@ -24,7 +24,7 @@
       </div>
       <div>
         <label>Age between</label>
-        <div class="age-flex">
+        <div class="flex-input">
           <input type="number" name="min-age" id="min-age" placeholder="Min age">
           <input type="number" name="max-age" id="max-age" placeholder="Max age">
         </div>
@@ -40,5 +40,7 @@
       <button type="submit"><i class="fas fa-search"></i> &nbsp; Search</button>
     </form>
   </div>
-  <h1>Hello world</h1>
+  <h1>Results ():</h1>
+  { include 'layout/search_result.html' %}
+  
 {% endblock content %}

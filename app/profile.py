@@ -25,7 +25,10 @@ def settings(username):
     username = request.form.get("username").strip() or ""
     first_name = request.form.get("firstName").strip() or ""
     last_name = request.form.get("lastName").strip() or ""
-    description = request.form.get("description").strip() or ""
+    city = request.form.get("city").strip() or "not specified"
+    country = request.form.get("country").strip() or "not specified"
+    description = request.form.get("description").strip() or "not specified"
+    meme_taste = request.form.get("meme-taste").strip() or "not specified"
 
     profile_pic = request.files.get("profilePic")
     meme_1 = request.files.get("meme-1")
@@ -37,7 +40,7 @@ def settings(username):
     password2 = request.form.get("password2")
 
     if False: # valid_username()
-      flash("Thhis username already exists. Try another one.", category="error")
+      flash("This username already exists. Try another one.", category="error")
     elif not re.search(r"\S{2,}", first_name):
       flash("First Name is too short.", category="error")
     elif not re.search(r"\S{2,}", last_name):
@@ -48,6 +51,9 @@ def settings(username):
       user.username = username
       user.first_name = first_name
       user.last_name = last_name
+      user.city = city
+      user.country = country
+      user.meme_taste = meme_taste
       user.description = description
 
       if profile_pic.filename:

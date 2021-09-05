@@ -8,19 +8,29 @@
 <form method="POST" enctype="multipart/form-data">
   <div>
     <label for="username">Username</label>
-    <input type="text"  id="username" name="username" placeholder="Enter username" value="{{ current_user.username }}">
+    <input type="text" id="username" name="username" placeholder="Enter username" value="{{ current_user.username }}" required>
   </div>
   <div>
-    <label for="firstName">First Name</label>
-    <input type="text"  id="firstName" name="firstName" placeholder="Enter first name" value="{{ current_user.first_name }}">
+    <label>Name</label>
+    <div class="flex-input">
+      <input type="text" id="firstName" name="firstName" placeholder="Enter first name" value="{{ current_user.first_name }}" required>
+      <input type="text" id="lastName" name="lastName" placeholder="Enter last name" value="{{ current_user.last_name }}" required>
+    </div>
   </div>
   <div>
-    <label for="lastName">Last Name</label>
-    <input type="text"  id="lastName" name="lastName" placeholder="Enter last name" value="{{ current_user.last_name }}">
+    <label>Location</label>
+    <div class="flex-input">
+      <input type="text" id="city" name="city" placeholder="Enter city" value="{{ current_user.city }}" required>
+      <input type="text" id="country" name="country" placeholder="Enter country" value="{{ current_user.country }}" required>
+    </div>
   </div>
   <div>
     <label for="description">Description</label>
     <textarea name="description" id="description">{{ current_user.description }}</textarea>
+  </div>
+  <div>
+    <label for="meme-taste">Meme taste</label>
+    <textarea name="meme-taste" id="meme-taste">{{ current_user.meme_taste }}</textarea>
   </div>
   <div>
     <label for="profilePic">Profile Picture</label>

@@ -1,0 +1,5 @@
+<div class="user-banner">
+  <img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="">
+  <h1>{{ user.first_name }} {{ user.last_name }}, {{ user.age }}</h1>
+  <p>{{ user.meme_taste }}</p>
+</div>

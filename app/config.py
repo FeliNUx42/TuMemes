@@ -6,6 +6,7 @@ class Config:
   PROFILE_PICTURE_FOLDER = "static/profile_pictures"
   MEME_PICTURE_FOLDER = "static/descriptions"
   MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+  RESULTS_PER_PAGE = 10
   SERVER_NAME = os.environ.get("SERVER_NAME", "127.0.0.1:5000")
 
   SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')\

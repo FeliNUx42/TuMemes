@@ -76,5 +76,11 @@ def create_app():
   app.register_blueprint(auth)
   app.register_blueprint(profile)
   app.register_blueprint(errors)
+
+  with app.app_context():
+    if db.engine.url.drivername == 'sqlite':
+        migrate.init_app(app, db, render_as_batch=True)
+    else:
+        migrate.init_app(app, db)
   
   return app

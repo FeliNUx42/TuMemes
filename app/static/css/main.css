@@ -41,8 +41,3 @@ main .search form.expand {
   border-top: 2px solid #aaa;
   margin: 0;
 }
-
-main .search form .age-flex {
-  display: flex;
-  gap: 30px;
-}

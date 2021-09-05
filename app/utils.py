@@ -1,4 +1,5 @@
 from flask import current_app
+from datetime import date
 from uuid import uuid4
 from PIL import Image
 from os import path
@@ -31,3 +32,10 @@ def save_file(form_pic, meme=False):
   i.save(picture_path)
 
   return picture_fn
+
+def valid_date(birthday:str):
+  try:
+    _ = date.fromisoformat(birthday)
+    return True
+  except:
+    return False

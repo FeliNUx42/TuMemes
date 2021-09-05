@@ -13,7 +13,11 @@ class User(db.Model, UserMixin):
   username = db.Column(db.String(128), unique=True)
   first_name = db.Column(db.String(128))
   last_name = db.Column(db.String(128))
-  description = db.Column(db.String(1000), default="No description...")
+  birthday = db.Column(db.Date)
+  description = db.Column(db.String(1000), default="not specified")
+  meme_taste = db.Column(db.String(512), default="not specified")
+  country = db.Column(db.String(100), default="not specified")
+  city = db.Column(db.String(100), default="not specified")
   created = db.Column(db.DateTime(), default=datetime.utcnow)
   last_online = db.Column(db.DateTime(), default=datetime.utcnow)
   profile_pic = db.Column(db.String(255), default="default.png")
@@ -36,6 +40,12 @@ class User(db.Model, UserMixin):
   
   def verify_password(self, password):
     return check_password_hash(self.password_hash, password)
+  
+  @property
+  def age(self):
+    today = datetime.utcnow()
+    return today.year - self.birthday.year - \
+      ((today.month, today.day) < (self.birthday.month, self.birthday.day))
 
   def __repr__(self):
     return f'<User({self.id}, {self.username}, {self.email})>'

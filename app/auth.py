@@ -1,9 +1,9 @@
-from os import error
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user, logout_user, login_user
+from datetime import date
 import re
 from .models import User
-from .utils import valid_email
+from .utils import valid_date, valid_email
 from . import db
 
 
@@ -35,12 +35,13 @@ def signup():
     return render_template("profile.prof", username=current_user.username)
   
   if request.method == "POST":
-    email = request.form.get('email')
-    username = request.form.get('username')
-    first_name = request.form.get('firstName')
-    last_name = request.form.get('lastName')
-    password1 = request.form.get('password1')
-    password2 = request.form.get('password2')
+    email = request.form.get('email').strip()
+    username = request.form.get('username').strip()
+    first_name = request.form.get('firstName').strip()
+    last_name = request.form.get('lastName').strip()
+    birthday = request.form.get('birthday').strip()
+    password1 = request.form.get('password1').strip()
+    password2 = request.form.get('password2').strip()
 
     if not valid_email(email):
       flash("This email is invalid or already exists. Try another one.", category="error")
@@ -50,6 +51,8 @@ def signup():
       flash("First Name is too short.", category="error")
     elif not re.search(r"\S{2,}", last_name):
       flash("Last Name is too short.", category="error")
+    elif not valid_date(birthday):
+      flash("Error while reading date of birth. Try again.")
     elif len(password1) < 8:
       pass
     elif password1 != password2:
@@ -60,13 +63,14 @@ def signup():
       user.username = username
       user.first_name = first_name
       user.last_name = last_name
+      user.birthday = date.fromisoformat(birthday)
       user.password = password1
 
       db.session.add(user)
       db.session.commit()
 
       login_user(user, remember=True)
-      flash("Account created successfullly!", category="success")
+      flash("Account created successfullly! Please edit your profile...", category="success")
 
       return redirect(url_for("profile.prof", username=user.username))
 
