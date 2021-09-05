@@ -1,0 +1,21 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+  <h1>Login</h1>
+  <form method="post">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" name="username" placeholder="Enter Username">
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" name="password" placeholder="Enter Password">
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn-submit">Login</button>
+    <p>New User? <a href="{{ url_for('auth.signup') }}">Click to register!</a></p>
+    <p>Forgot your password? <a href="{{ '' }}">Click to reset it!</a></p>
+  </form>
+{% endblock content %}

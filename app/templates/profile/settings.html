@@ -1,0 +1,63 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Settings - {{ current_user.username }}{% endblock %}
+
+
+{% block content %}
+<h1>Settings</h1>
+<form method="POST" enctype="multipart/form-data">
+  <div>
+    <label for="username">Username</label>
+    <input type="text"  id="username" name="username" placeholder="Enter username" value="{{ current_user.username }}">
+  </div>
+  <div>
+    <label for="firstName">First Name</label>
+    <input type="text"  id="firstName" name="firstName" placeholder="Enter first name" value="{{ current_user.first_name }}">
+  </div>
+  <div>
+    <label for="lastName">Last Name</label>
+    <input type="text"  id="lastName" name="lastName" placeholder="Enter last name" value="{{ current_user.last_name }}">
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <textarea name="description" id="description">{{ current_user.description }}</textarea>
+  </div>
+  <div>
+    <label for="profilePic">Profile Picture</label>
+    <input type="file" name="profilePic" id="profilePic" accept="image/*">
+  </div>
+  <div class="pictures">
+    <h3>Description in 3 memes:</h3>
+    <ul class="memes">
+      <li>
+        <input type="file" name="meme-1" id="meme-1" class="input-meme" target="preview-1" accept="image/*">
+        <img id="preview-1" src="{{ url_for('static', filename='descriptions/'+current_user.meme_1) }}" alt="Meme">
+      </li>
+      <li>
+        <input type="file" name="meme-2" id="meme-2" class="input-meme" target="preview-2" accept="image/*">
+        <img id="preview-2" src="{{ url_for('static', filename='descriptions/'+current_user.meme_2) }}" alt="Meme">
+      </li>
+      <li>
+        <input type="file" name="meme-3" id="meme-3" class="input-meme" target="preview-3" accept="image/*">
+        <img id="preview-3" src="{{ url_for('static', filename='descriptions/'+current_user.meme_3) }}" alt="Meme">
+      </li>
+    </ul>
+  </div>
+  <div id="change-pwd" class="checkbox-div">
+    <label for="activate-pwd" id="activate-pwd-label">Change Password: </label>
+    <input type="checkbox" name="activate-pwd" id="activate-pwd">
+  </div>
+  <div class="settings-passwords pwd-hidden">
+    <div>
+      <label for="password1">Password</label>
+      <input type="password"  id="password1" name="password1" placeholder="Enter password" value="none">
+    </div>
+    <div>
+      <label for="password2">Password (Confirm)</label>
+      <input type="password"  id="password2" name="password2" placeholder="Confirm password" value="none">
+    </div>
+  </div>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button type="submit" class="btn-submit">Save</button>
+</form>
+{% endblock %}

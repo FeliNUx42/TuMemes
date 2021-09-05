@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+main {
+  margin: auto;
+  max-width: 1280px;
+  min-height: calc(100vh - 80px);
+  padding: 30px;
+  font-family: Helvetica;
+}

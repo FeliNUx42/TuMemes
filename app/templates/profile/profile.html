@@ -1,0 +1,35 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}{{ author.username }}{% endblock title %}
+
+{% block content %}
+<div class="profile">
+  <figure>
+    <img src="{{ url_for('static', filename='profile_pictures/'+author.profile_pic) }}" alt="Profile Picture">
+  </figure>
+  <h1>{{ author.first_name }} {{ author.last_name }}</h1>
+  <p>{{ author.description }}</p>
+  <h2>{{ author.username }}</h3>
+  <hr>
+  <ul class="data">
+    <li>
+      <h4>Age</h4>
+      <p>{{ "Hello" }}</p>
+    </li>
+    <li>
+      <h4>Meme types</h4>
+      <p>{{ "hello" }}</p>
+    </li>
+    <li>
+      <h4>Location</h4>
+      <p>{{ "hello" }}, {{ "world" }}</p>
+    </li>
+  </ul>
+  <h3>Description in 3 memes:</h3>
+  <ul class="memes">
+    <li><img src="{{ url_for('static', filename='descriptions/'+author.meme_1) }}" alt="Meme"></li>
+    <li><img src="{{ url_for('static', filename='descriptions/'+author.meme_2) }}" alt="Meme"></li>
+    <li><img src="{{ url_for('static', filename='descriptions/'+author.meme_3) }}" alt="Meme"></li>
+  </ul>
+</div>
+{% endblock content %}
