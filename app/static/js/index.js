@@ -14,6 +14,13 @@ function alertClose (element) {
   element.parentNode.classList.add("alert-hidden");
 }
 
+
+// expand search area
+function expandSearch() {
+  document.querySelector("main .search form").classList.toggle("expand");
+}
+
+
 /*
 // grow textarea for creating / editing Post
 

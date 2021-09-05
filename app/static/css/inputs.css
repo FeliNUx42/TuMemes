@@ -148,7 +148,7 @@ main form .pwd-hidden {
 }
 
 main form input:focus, main form textarea:focus {
-  outline: 2px solid #080;
+  outline: 2px solid #00B1A8;
 }
 
 main form .pictures h3 {

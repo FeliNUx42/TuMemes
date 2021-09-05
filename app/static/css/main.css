@@ -4,11 +4,45 @@
   box-sizing: border-box;
 }
 
-
 main {
   margin: auto;
   max-width: 1280px;
   min-height: calc(100vh - 80px);
   padding: 30px;
   font-family: Helvetica;
+}
+
+main .search h1 {
+  text-align: center;
+  padding: 15px 0 10px 0;
+  font-size: 28px;
+  margin-bottom: 0;
+  color: #555;
+  font-weight: 500;
+}
+
+main .search {
+  box-shadow: 0px 0px 10px 3px #777;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+main .search form {
+  overflow: hidden;
+  height: 0;
+  margin: 0 30px;
+  transition: all .8s ease-in-out;
+  border-top: 2px solid #fff;
+}
+
+main .search form.expand {
+  height: 648px;
+  padding: 20px 30px;
+  border-top: 2px solid #aaa;
+  margin: 0;
+}
+
+main .search form .age-flex {
+  display: flex;
+  gap: 30px;
 }
