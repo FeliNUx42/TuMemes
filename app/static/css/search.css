@@ -54,6 +54,10 @@ main .search-result .user-banner i {
   transition: all .7s ease-in-out;
 }
 
+main .search-result .user-banner i:hover {
+  cursor: pointer;
+}
+
 main .search-result .user-banner i.fas {
   position: absolute;
   top: 10px;

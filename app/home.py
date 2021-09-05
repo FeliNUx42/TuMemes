@@ -16,7 +16,7 @@ home = Blueprint('home', __name__)
       del session["SEARCH_QUERY"]
 """
 
-@home.route('/')
+@home.route('/', methods=["GET", "POST"])
 def index():
   search = request.args.get("search")
   page = request.args.get("page", 1, type=int)
