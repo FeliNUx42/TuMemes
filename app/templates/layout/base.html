@@ -34,6 +34,9 @@
       <li><a id="logout" href="{{ url_for('auth.logout') }}">Logout</a></li>
       <li class="nav-profile">
         <figure class="nav-collapse-button"><img src="{{ url_for('static', filename='profile_pictures/'+current_user.profile_pic) }}" alt="Profile"></figure>
+        {% if current_user.new_matches() or current_user.new_messages() %}
+          <div class="notification">{{ current_user.new_matches() + current_user.new_messages() }}</div>
+        {% endif %}
       </li>
       {% else %}
       <li><a href="{{ url_for('auth.login') }}">Login</a></li>
