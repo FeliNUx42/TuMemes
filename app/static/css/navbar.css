@@ -146,8 +146,8 @@ nav {
 
 .nav-collapse li a {
   width: 100%;
-  display: block;
-  justify-content: left;
+  display: flex;
+  justify-content: space-between;
   text-decoration: none;
   color: #555;
   font-size: 18px;
@@ -158,6 +158,16 @@ nav {
 .nav-collapse li a p {
   display: inline;
   margin-left: 10px;
+}
+
+.nav-collapse li a span {
+  color: #fff;
+  background-color: #00B1A8;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 3px;
+  height: 100%;
 }
 
 .nav-collapse li a:hover {

@@ -52,17 +52,39 @@
     <h2>{{ current_user.email }}</h2>
     <ul>
       <li>
-        <a href="{{ url_for('profile.prof', username=current_user.username) }}"><i class="fas fa-comment-alt"></i> <p>Your Messages</p></a>
+        <a href="{{ url_for('profile.prof', username=current_user.username) }}">
+          <div><i class="fas fa-comment-alt"></i>
+            <p>Your Messages</p>
+          </div>
+          {% if current_user.new_messages() %}
+          <span>{{ current_user.new_messages() }} new</span>
+          {% endif %}
+        </a>
       </li>
       <li>
-        <a href="{{ url_for('profile.prof', username=current_user.username) }}"><i class="fa fa-heart"></i> <p>Your Matches</p></a>
+        <a href="{{ url_for('profile.prof', username=current_user.username) }}">
+          <div><i class="fa fa-heart"></i>
+            <p>Your Matches</p>
+          </div>
+          {% if current_user.new_matches() %}
+          <span>{{ current_user.new_matches() }} new</span>
+          {% endif %}
+        </a>
       </li>
       <li>
-        <a href="{{ url_for('profile.prof', username=current_user.username) }}"><i class="fas fa-user"></i> <p>Your Profile</p></a>
+        <a href="{{ url_for('profile.prof', username=current_user.username) }}">
+          <div><i class="fas fa-user"></i>
+            <p>Your Profile</p>
+          </div>
+        </a>
       </li>
       <p class="other">Other:</p>
       <li>
-        <a href="{{ url_for('profile.settings', username=current_user.username) }}"><i class="fas fa-user-cog"></i> <p>Edit Profile</p></a>
+        <a href="{{ url_for('profile.settings', username=current_user.username) }}">
+          <div><i class="fas fa-user-cog"></i>
+            <p>Edit Profile</p>
+          </div>
+        </a>
       </li>
     </ul>
   </aside>      

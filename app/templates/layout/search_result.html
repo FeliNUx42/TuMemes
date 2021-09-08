@@ -10,7 +10,7 @@
       {% if current_user.is_authenticated %}
       <i
         class="far fa-heart match"
-        param="username={{ user.username }}&csrf_token={{ csrf_token() }}"
+        param="target={{ user.username }}&csrf_token={{ csrf_token() }}"
         url="{{ url_for('profile.match', username=current_user.username) }}"
       ></i>
       {% else %}

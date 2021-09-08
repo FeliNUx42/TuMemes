@@ -105,4 +105,6 @@ def match(username):
   if current_user != user:
     abort(403)
 
-  target_username = request.form.get("")
+  target_username = request.form.get("target")
+
+  
