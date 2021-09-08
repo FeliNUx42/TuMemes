@@ -1,0 +1,36 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+  <h1>Matches ({{ current_user.new_matches() }} new)</h1>
+
+  <div class="match-list">
+    {% for match in matches.items %}
+    {% set user = match.sender %}
+    <div class="match-banner match-{{ 'read' if match.read else 'unread'}}">
+      <div>
+        <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
+        <h1><b>{{ user.first_name }} {{ user.last_name }}</b> liked you. <span class="match-timestamp">{{ moment(match.timestamp).fromNow() }}</span></h1>
+      </div>
+      <i
+        class="{{ 'fas' if current_user.matching(user) else 'far'}} fa-heart match"
+        param="target={{ user.username }}&csrf_token={{ csrf_token() }}"
+        url="{{ url_for('profile.match', username=current_user.username) }}"
+      ></i>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <div class="pagination">
+    {% for page_num in matches.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+    {% if page_num %}
+      {% if page_num == matches.page %}
+      <a class="pagination-link current-page" href="{{ url_for('home.index', page=page_num) }}">{{ page_num }}</a>
+      {% else %}
+      <a class="pagination-link" href="{{ url_for('home.index', page=page_num) }}">{{ page_num }}</a>
+      {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+  {% endfor %}
+  </div>
+{% endblock content %}

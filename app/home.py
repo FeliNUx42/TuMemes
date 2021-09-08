@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, session, current_app, make_response, url_for
+from flask import Blueprint, render_template, request, session, current_app, make_response, url_for, flash
+from flask_login import current_user
 from datetime import datetime, timedelta
-from flask.helpers import flash
 from sqlalchemy import or_
 from .models import User
 
@@ -22,7 +22,8 @@ def index():
   page = request.args.get("page", 1, type=int)
   per_page = request.args.get("per-page", current_app.config['RESULTS_PER_PAGE'], type=int)
 
-  result = User.query.order_by(User.created.desc()).paginate(page, per_page, True)
+  if not current_user.is_authenticated: current_user.username = ""
+  result = User.query.filter(User.username != current_user.username).order_by(User.created.desc()).paginate(page, per_page, True)
 
   return render_template("main/home.html", result=result)
 

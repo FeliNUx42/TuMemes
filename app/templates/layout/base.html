@@ -13,11 +13,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-  <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/markdown.css') }}">-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/matches.css') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta&display=swap" rel="stylesheet"> 
   <script src="https://kit.fontawesome.com/880e1cc2ff.js" crossorigin="anonymous"></script>
+  {{ moment.include_moment() }}
   <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
@@ -62,7 +63,7 @@
         </a>
       </li>
       <li>
-        <a href="{{ url_for('profile.prof', username=current_user.username) }}">
+        <a href="{{ url_for('profile.matches', username=current_user.username) }}">
           <div><i class="fa fa-heart"></i>
             <p>Your Matches</p>
           </div>

@@ -1,8 +1,12 @@
 from flask import current_app
+from .models import User
+from . import db
+from string import ascii_letters
 from datetime import date
 from uuid import uuid4
 from PIL import Image
 from os import path
+import random
 import re
 
 
@@ -39,3 +43,21 @@ def valid_date(birthday:str):
     return True
   except:
     return False
+
+def create_user():
+  def string(length):
+    char = ""
+    for _ in range(length):
+      char += random.choice(ascii_letters)
+    return char
+  
+  u = User()
+  u.email = string(20)
+  u.username = string(10)
+  u.first_name = string(6)
+  u.last_name = string(6)
+  u.birthday = date(2001, 1, 1)
+  u.password = "12345678"
+
+  db.session.add(u)
+  db.session.commit()

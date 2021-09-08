@@ -25,6 +25,7 @@ main .search-result .user-banner img {
   object-fit: cover;
   background-color: #000;
   border-radius: 3px 3px 0 0;
+  cursor: pointer;
 }
 
 main .search-result .user-banner .user-data {

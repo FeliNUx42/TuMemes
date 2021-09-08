@@ -3,13 +3,17 @@
 <div class="search-result">
   {% for user in result.items %}
   <div class="user-banner">
-    <img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="">
+    <img
+      onclick="window.location=`{{ url_for('profile.prof', username=user.username) }}`"
+      src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}"
+      alt=""
+    >
     <div class="user-data">
       <h1>{{ user.first_name }} {{ user.last_name }}, {{ user.age }}</h1>
       <p>{{ user.meme_taste }}</p>
       {% if current_user.is_authenticated %}
       <i
-        class="far fa-heart match"
+        class="{{ 'fas' if current_user.matching(user) else 'far'}} fa-heart match"
         param="target={{ user.username }}&csrf_token={{ csrf_token() }}"
         url="{{ url_for('profile.match', username=current_user.username) }}"
       ></i>

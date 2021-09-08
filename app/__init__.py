@@ -1,15 +1,18 @@
 from flask import Flask, session, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail
 from flask_migrate import Migrate
+from flask_moment import Moment
+from datetime import date
 from .config import Config
 
 
 db = SQLAlchemy()
 mail = Mail()
 migrate = Migrate()
+moment = Moment()
 csrf = CSRFProtect()
 
 login_manager = LoginManager()
@@ -20,7 +23,7 @@ login_manager.needs_refresh_message_category = "error"
 
 @login_manager.user_loader
 def load_user(id):
-  from .models import User
+  from .models import User, Match, Message
   return User.query.get(int(id))
 
 
@@ -41,29 +44,27 @@ def create_app():
     if session.get("SEARCH_QUERY"):
       del session["SEARCH_QUERY"]
   
+  @app.after_request
+  def read_things(response):
+    if request.endpoint == "profile.matches":
+      for match in current_user.match_inbox.all():
+        match.read = True
+      
+      db.session.commit()
+    
+    return response
+  
   @app.cli.command("create-db")
-  def create_user():
-    u = User()
-    u.username = "example"
-    u.email = "example@example.com"
-    u.first_name = "John"
-    u.last_name = "smith"
-    u.password = "12345678"
-
-    m = Message()
-    m.content = "Hello world!"
-    m.sender = u
-    m.target = u
-
-    db.session.add(u)
-    db.session.add(m)
-
-    db.session.commit()
+  def create_db():
+    from .utils import create_user
+    for _ in range(3):
+      create_user()
 
   db.init_app(app)
   db.create_all(app=app)
   mail.init_app(app)
   migrate.init_app(app, db)
+  moment.init_app(app)
   login_manager.init_app(app)
   csrf.init_app(app)
 

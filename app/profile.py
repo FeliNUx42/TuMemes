@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 import re
-from .models import User
+from .models import User, Match
 from .utils import save_file, valid_picture
 from . import db
 
@@ -106,5 +106,27 @@ def match(username):
     abort(403)
 
   target_username = request.form.get("target")
+  target = User.query.filter_by(username=target_username).first()
 
+  if not target:
+    abort(500)
+
+  if user.matching(target):
+    user.unmatch(target)
+  else:
+    user.match(target)
   
+  return "success"
+
+@profile.route('/<username>/matches')
+@login_required
+def matches(username):
+  page = request.args.get("page", 1, type=int)
+  user = User.query.filter_by(username=username).first_or_404()
+
+  if current_user != user:
+    abort(403)
+  
+  matches = user.match_inbox.order_by(Match.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
+
+  return render_template("profile/matches.html", matches=matches)

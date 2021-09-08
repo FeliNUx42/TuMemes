@@ -58,24 +58,33 @@ class User(db.Model, UserMixin):
   msg_inbox = db.relationship("Message", foreign_keys='Message.target_id', backref='target', lazy="dynamic")
   msg_sent = db.relationship("Message", foreign_keys='Message.sender_id', backref='sender', lazy="dynamic")
 
-  def is_matching(self, user):
+  def is_match(self, user):
     inbox = self.match_inbox.filter(Match.sender == user).count() > 0
     sent = self.match_sent.filter(Match.target == user).count() > 0
     return inbox and sent
+  
+  def matching(self, user):
+    return self.match_sent.filter(Match.target == user).count() > 0
 
   def match(self, user):
-    if self.match_sent.filter(Match.sender == self).count() > 0:
+    if self.match_sent.filter(Match.target == user).count() > 0:
       return
     if self == user:
       return
-    self.match_sent.append(user)
+    m = Match(sender=self, target=user)
+
+    db.session.add(m)
+    db.session.commit()
 
   def unmatch(self, user):
     if self.match_sent.filter(Match.sender == self).count() == 0:
       return
     if self == user:
       return
-    self.match_sent.remove(user)
+    m = self.match_sent.filter(Match.target == user).first()
+
+    db.session.delete(m)
+    db.session.commit()
   
   def new_matches(self):
     return self.match_inbox.filter(Match.read == False).count()
