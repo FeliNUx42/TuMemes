@@ -1,0 +1,27 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Inbox - {{ current_user.username }}{% endblock title %}
+
+{% block wrapper %}
+<div class="msg-inbox">
+  <div class="msg-senders">
+    {% for user in current_user.contacts() %}
+    <div class="msg-sender">
+      <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
+      <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="msg-chats">
+    {% for user in current_user.contacts() %}
+     <div class="msg-chat chat-{{ user.id }}">
+       {% for message in current_user.chat(user) %}
+         <p class="content sender-{{ message.sender == current_user and 'me' or 'other' }}">
+           {{ message.content }}
+          </p>
+       {% endfor %}
+     </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock wrapper %}

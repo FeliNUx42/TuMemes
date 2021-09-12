@@ -6,7 +6,7 @@ from datetime import date
 from uuid import uuid4
 from PIL import Image
 from os import path
-import random
+import names
 import re
 
 
@@ -45,17 +45,13 @@ def valid_date(birthday:str):
     return False
 
 def create_user():
-  def string(length):
-    char = ""
-    for _ in range(length):
-      char += random.choice(ascii_letters)
-    return char
-  
   u = User()
-  u.email = string(20)
-  u.username = string(10)
-  u.first_name = string(6)
-  u.last_name = string(6)
+  f = names.get_first_name()
+  l = names.get_last_name()
+  u.email = f"{f}.{l}@gmail.mom"
+  u.username = f"{f}-{l}"
+  u.first_name = f
+  u.last_name = l
   u.birthday = date(2001, 1, 1)
   u.password = "12345678"
 

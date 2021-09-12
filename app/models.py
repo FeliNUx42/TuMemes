@@ -1,5 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import backref, defaultload, lazyload
+from sqlalchemy import or_
 from . import db
 from flask_login import UserMixin
 from flask import current_app
@@ -91,6 +92,26 @@ class User(db.Model, UserMixin):
   
   def new_messages(self):
     return self.msg_inbox.filter(Message.read == False).count()
+  
+  def contacts(self):
+    senders = set(map(lambda m: m.sender, self.msg_inbox.all()))
+    receivers = set(map(lambda x: x.target, self.msg_sent.all()))
+    return sorted(senders.union(receivers), key=lambda x:x.id)
+  
+  def chat(self, target):
+    messages = Message.query.filter(or_(Message.target == self, Message.sender == self))\
+      .filter(or_(Message.target == target, Message.sender == target))
+    
+    return messages.order_by(Message.timestamp.asc()).limit(100).all()
+  
+  def messages_to(self, target):
+    return self.msg_sent.filter_by(target=target).\
+      order_by(Message.timestamp.asc()).limit(100).all()
+  
+  def send_message(self, content, target):
+    msg = Message(content=content, sender=self, target=target)
+    db.session.add(msg)
+    db.session.commit()
 
   @property
   def password(self):

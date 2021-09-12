@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 import re
-from .models import User, Match
+from .models import Message, User, Match
 from .utils import save_file, valid_picture
 from . import db
 
@@ -130,3 +130,13 @@ def matches(username):
   matches = user.match_inbox.order_by(Match.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
 
   return render_template("profile/matches.html", matches=matches)
+
+@profile.route('/<username>/inbox')
+@login_required
+def inbox(username):
+  user = User.query.filter_by(username=username).first_or_404()
+
+  if current_user != user:
+    abort(403)
+  
+  return render_template("profile/inbox.html")
