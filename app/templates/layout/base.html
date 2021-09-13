@@ -57,7 +57,7 @@
     <h2>{{ current_user.email }}</h2>
     <ul>
       <li>
-        <a href="{{ url_for('profile.prof', username=current_user.username) }}">
+        <a href="{{ url_for('profile.inbox', username=current_user.username) }}">
           <div><i class="fas fa-comment-alt"></i>
             <p>Your Messages</p>
           </div>

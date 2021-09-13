@@ -17,12 +17,12 @@ h3 {
   margin: 2rem 0;
 }
 
-main form label {
+form label {
   display: block;
   margin-bottom: 5px;
 }
 
-main form input {
+form input {
   display: block;
   width: 100%;
   height: 40px;
@@ -33,11 +33,11 @@ main form input {
   margin-bottom: 15px;
 }
 
-main form input[type=file] {
+form input[type=file] {
   padding-left: 0;
 }
 
-main form input[type=file]::file-selector-button {
+form input[type=file]::file-selector-button {
   width: 100px;
   height: 100%;
   background: linear-gradient(to right, #080, #008);
@@ -47,16 +47,16 @@ main form input[type=file]::file-selector-button {
   margin-right: 20px;
 }
 
-main form input[type=file]::file-selector-button:hover {
+form input[type=file]::file-selector-button:hover {
   background: linear-gradient(to right, #008, #800);
 }
 
-main form .flex-input {
+form .flex-input {
   display: flex;
   gap: 30px;
 }
 
-main form textarea {
+form textarea {
   display: block;
   width: 100%;
   height: 100px;
@@ -68,13 +68,13 @@ main form textarea {
   resize: none;
 }
 
-main form #data {
+form #data {
   min-height: 250px;
   overflow-y: hidden;
   resize: none;
 }
 
-main form button {
+form button {
   padding: 10px 15px;
   font-size: 16px;
   border: none;
@@ -84,30 +84,30 @@ main form button {
   transition: all .3s ease-out;
 }
 
-main form button:hover {
+form button:hover {
   background: linear-gradient(to right, #008, #800);
 }
 
-main form button.danger{
+form button.danger{
   background-color: #b00;
 }
 
-main form button[type=submit] {
+form button[type=submit] {
   margin-bottom: 1rem;
 }
 
-main form .checkbox-div {
+form .checkbox-div {
   display: flex;
   justify-content: start;
   align-items: center;
   margin-bottom: 15px;
 }
 
-main form .checkbox-div label {
+form .checkbox-div label {
   margin: 10px 20px 10px 0;
 }
 
-main form input[type="checkbox"] {
+form input[type="checkbox"] {
   margin-bottom: 0;
 
   font-size: 30px;
@@ -124,11 +124,11 @@ main form input[type="checkbox"] {
   transition: all .2s ease-in-out;
   }
   
-main form input[type="checkbox"]:checked {
+form input[type="checkbox"]:checked {
   background: #0ebeff;
 }
   
-main form input[type="checkbox"]:after{
+form input[type="checkbox"]:after{
   position: absolute;
   content: "";
   width: 30px;
@@ -144,26 +144,26 @@ main form input[type="checkbox"]:after{
   transition: all .2s ease-in-out;
 }
   
-main form input[type="checkbox"]:checked:after{
+form input[type="checkbox"]:checked:after{
   left: calc(100% - 30px);
 }
 
-main form .pwd-hidden {
+form .pwd-hidden {
   display: none;
 }
 
-main form input:focus, main form textarea:focus {
+form input:focus, form textarea:focus {
   outline: 2px solid #00B1A8;
 }
 
-main form .pictures h3 {
+form .pictures h3 {
   font-size: 18px;
   color: #333;
   margin-top: 40px;
   margin-bottom: 0;
 }
 
-main form .pictures ul {
+form .pictures ul {
   list-style: none;
   display: flex;
   justify-content: center;
@@ -173,18 +173,18 @@ main form .pictures ul {
   margin-bottom: 30px;
 }
 
-main form .pictures li img {
+form .pictures li img {
   width: 20vw;
   height: 20vw;
   background-color: #000;
   object-fit: contain;
 }
 
-main form .pictures input[type="file"] {
+form .pictures input[type="file"] {
   width: 20vw;
 }
 
-main .tab-bar {
+.tab-bar {
   display: flex;
   justify-content: left;
   gap: 2px;
@@ -192,7 +192,7 @@ main .tab-bar {
   margin-bottom: 15px;
 }
 
-main .tab-bar button {
+.tab-bar button {
   background-color: #ddd;
   border: none;
   border-radius: 3px;
@@ -205,44 +205,44 @@ main .tab-bar button {
   transition: all 0.3s ease-out;
 }
 
-main .tab-bar button:not(.tab-active):hover {
+.tab-bar button:not(.tab-active):hover {
   background-color: #ccc;
 } 
 
-main .tab-bar .tab-active {
+.tab-bar .tab-active {
   background-color: #ccc;
 }
 
-main .tab-window:not(.tab-active) {
+.tab-window:not(.tab-active) {
   display: none;
 }
 
-main .tab-preview {
+.tab-preview {
   margin-bottom: 20px;
 }
 
 @media (max-width: 1400px) {
-  main form .pictures li img {
+  form .pictures li img {
     width: 27vw;
     height: 27vw;
   }
 
-  main form .pictures input[type="file"] {
+  form .pictures input[type="file"] {
     width: 27vw;
   }
 }
 
 @media (max-width: 760px) {
-  main form .pictures ul {
+  form .pictures ul {
     flex-direction: column;
   }
 
-  main form .pictures li img {
+  form .pictures li img {
     width: 100%;
     height: 90vw;
   }
 
-  main form .pictures input[type="file"] {
+  form .pictures input[type="file"] {
     width: 100%;
   }
 }

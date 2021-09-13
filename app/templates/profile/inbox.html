@@ -5,21 +5,37 @@
 {% block wrapper %}
 <div class="msg-inbox">
   <div class="msg-senders">
-    {% for user in current_user.contacts() %}
-    <div class="msg-sender">
+    {% for n, user in enumerate(current_user.contacts()) %}
+    <div class="msg-sender {{ not n and 'current-sender' or '' }}" target="chat-{{ user.id }}">
       <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
       <h1>{{ user.first_name }} {{ user.last_name }}</h1>
     </div>
     {% endfor %}
   </div>
   <div class="msg-chats">
-    {% for user in current_user.contacts() %}
-     <div class="msg-chat chat-{{ user.id }}">
-       {% for message in current_user.chat(user) %}
-         <p class="content sender-{{ message.sender == current_user and 'me' or 'other' }}">
-           {{ message.content }}
-          </p>
-       {% endfor %}
+    {% for n, user in enumerate(current_user.contacts()) %}
+     <div id="chat-{{ user.id }}" class="msg-chat {{ not n and 'current-chat' or '' }}">
+       <div class="msg-container">
+          {% for message in current_user.chat(user) %}
+          <div class="msg-box sender-{{ message.sender == current_user and 'me' or 'other' }}">
+            <div class="msg-content">
+              <p class="msg-header">
+                {% if message.sender != current_user %}
+                <span class="msg-author">{{ user.first_name }} {{ user.last_name }}</span>
+                {% endif %}
+                <span class="msg-time">{{ moment(message.timestamp).format("DD MMM, HH:mm") }}</span>
+              </p>
+              <p>{{ message.content }}</p>
+            </div>
+          </div>
+        {% endfor %}
+       </div>
+       <form action="" method="POST">
+        <input type="hidden" name="target" value="{{ user.username }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="text" name="content" placeholder="Enter message for {{ user.first_name }} {{ user.last_name }}" {{ not n and 'autofocus' or '' }}>
+        <button type="submit">Send</button>
+      </form>
      </div>
     {% endfor %}
   </div>

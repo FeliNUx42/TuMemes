@@ -35,7 +35,9 @@ def create_app():
 
   @app.context_processor
   def globals():
-    return {}
+    return {
+      "enumerate": enumerate
+    }
 
   @app.before_request
   def check_session():
@@ -49,6 +51,12 @@ def create_app():
     if request.endpoint == "profile.matches":
       for match in current_user.match_inbox.all():
         match.read = True
+      
+      db.session.commit()
+    
+    if request.endpoint == "profile.inbox":
+      for msg in current_user.msg_inbox.all():
+        msg.read = False #change
       
       db.session.commit()
     

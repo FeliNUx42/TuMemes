@@ -8,7 +8,6 @@
   width: 100%;
   height: calc(100vh - 80px);
   font-family: Helvetica;
-  background-color: aqua;
   display: flex;
 }
 
@@ -29,6 +28,15 @@
   padding: 15px 20px;
   margin-bottom: 5px;
   border-radius: 3px;
+  transition: all .2s ease-in-out;
+}
+
+.msg-sender:hover {
+  background-color: #ddd;
+}
+
+.msg-sender.current-sender {
+  background-color: #ddd;
 }
 
 .msg-sender figure {
@@ -55,4 +63,81 @@
 .msg-chats {
   flex: 1;
   width: 100%;
+  background: linear-gradient(217deg, #a11, #0000 70.71%),
+              linear-gradient(127deg, #1a1, #0000 70.71%),
+              linear-gradient(336deg, #11f, #0000 70.71%);
+}
+
+.msg-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+} 
+
+.msg-chat:not(.current-chat) {
+  display: none;
+}
+
+.msg-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.msg-box {
+  padding: 5px 10px;
+  display: flex;
+}
+
+.msg-box.sender-me {
+  justify-content: end;
+}
+
+.msg-box .msg-content {
+  background-color: #eee;
+  padding: 8px 12px 6px 12px;
+  border-radius: 3px;
+  max-width: 70%;
+}
+
+.msg-box.sender-me .msg-content {
+  justify-content: end;
+  background-color: #bfb;
+}
+
+.msg-box p {
+  width: 100%;
+}
+
+.msg-box.sender-me p {
+  text-align: right;
+}
+
+.msg-box .msg-header {
+  margin-bottom: 7px;
+  font-size: 14px;
+}
+
+.msg-box .msg-author {
+  font-weight: 900;
+  margin-right: 8px;
+}
+
+.msg-box .msg-time {
+  color: #777;
+}
+
+.msg-chat form {
+  background-color: #eee;
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px;
+}
+
+.msg-chat form input {
+  margin: 0;
+}
+
+.msg-chat form button {
+  margin: 0;
 }

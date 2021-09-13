@@ -37,6 +37,26 @@ hearts.forEach(heart => {
   });
 })
 
+// hide / show chats
+const contacts = document.querySelectorAll(".msg-sender");
+const chats = document.querySelectorAll(".msg-chat");
+
+contacts.forEach(contact => {
+  contact.addEventListener("click", () => {
+    if (contact.classList.contains("current-sender")) return
+
+    contacts.forEach(c => {
+      if (c.classList.contains("current-sender")) c.classList.remove("current-sender")
+    });
+
+    chats.forEach(c => {
+      if (c.classList.contains("current-chat")) c.classList.remove("current-chat")
+    });
+
+    contact.classList.add("current-sender")
+    document.getElementById(contact.attributes.target.value).classList.add("current-chat")
+  });
+});
 
 /*
 // grow textarea for creating / editing Post

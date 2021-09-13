@@ -131,12 +131,22 @@ def matches(username):
 
   return render_template("profile/matches.html", matches=matches)
 
-@profile.route('/<username>/inbox')
+@profile.route('/<username>/inbox', methods=["GET", "POST"])
 @login_required
 def inbox(username):
   user = User.query.filter_by(username=username).first_or_404()
 
   if current_user != user:
     abort(403)
+  
+  if request.method == "POST":
+    target = request.form.get("target")
+    content = request.form.get("content")
+
+    target = User.query.filter_by(username=target).first_or_404()
+    msg = Message(content=content, sender=current_user, target=target)
+
+    db.session.add(msg)
+    db.session.commit()
   
   return render_template("profile/inbox.html")
