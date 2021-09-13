@@ -90,23 +90,19 @@ class User(db.Model, UserMixin):
   def new_matches(self):
     return self.match_inbox.filter(Match.read == False).count()
   
-  def new_messages(self):
+  def new_messages(self, sender=None):
     return self.msg_inbox.filter(Message.read == False).count()
   
   def contacts(self):
     senders = set(map(lambda m: m.sender, self.msg_inbox.all()))
     receivers = set(map(lambda x: x.target, self.msg_sent.all()))
-    return sorted(senders.union(receivers), key=lambda x:x.id)
+    return sorted(senders.union(receivers), key=lambda x:x.chat(self)[-1].timestamp, reverse=True)
   
   def chat(self, target):
     messages = Message.query.filter(or_(Message.target == self, Message.sender == self))\
       .filter(or_(Message.target == target, Message.sender == target))
     
     return messages.order_by(Message.timestamp.asc()).limit(100).all()
-  
-  def messages_to(self, target):
-    return self.msg_sent.filter_by(target=target).\
-      order_by(Message.timestamp.asc()).limit(100).all()
   
   def send_message(self, content, target):
     msg = Message(content=content, sender=self, target=target)

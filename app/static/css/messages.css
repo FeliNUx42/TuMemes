@@ -109,7 +109,7 @@
   width: 100%;
 }
 
-.msg-box.sender-me p {
+.msg-box.sender-me .msg-header {
   text-align: right;
 }
 
@@ -131,11 +131,15 @@
   background-color: #eee;
   display: flex;
   gap: 20px;
-  padding: 10px 20px;
+  padding: 10px;
 }
 
-.msg-chat form input {
+.msg-chat form textarea {
+  height: 40px;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
   margin: 0;
+  overflow-y: hidden;
 }
 
 .msg-chat form button {

@@ -58,81 +58,57 @@ contacts.forEach(contact => {
   });
 });
 
-/*
+
 // grow textarea for creating / editing Post
 
-function autoGrow(element) {
+function autoGrow(event) {
   window.setTimeout(() => {
-    element.style.height = "auto";
-    element.style.height = element.scrollHeight + "px";
+    this.style.height = "40px";
+    if (this.scrollHeight > 200) {
+      this.style.height = "200px";
+      this.style.overflowY = "auto"
+      return;
+    }
+    this.style.height = this.scrollHeight + "px";
   }, 0);
 }
 
-// Read more
+// submit form if enter, not if shift enter
 
-function readMoreFunc() {
-  const readMore = document.querySelectorAll(".read-more");
-  readMore.forEach(elem => {
-    if (elem.offsetHeight < 100)  return;
-    
-    elem.classList.add("hide-overflow");
-    let btn = document.createElement("div");
-    btn.classList.add("read-more-div");
-    btn.appendChild(document.createElement("a"));
-    elem.parentElement.appendChild(btn);
-  })
-
-  const readMoreBtn = document.querySelectorAll(".read-more-div a");
-  readMoreBtn.forEach(elem => {
-    elem.addEventListener("click", () => {
-      elem.parentNode.parentNode.classList.toggle("read-more-active")
-    });
-  })
-}
-
-readMoreFunc();
-
-// change mode: edit - preview
-function changeMode(element, body) {
-  if (element.classList.contains("tab-active")) return;
-  
-  const buttons = document.querySelectorAll(".tab-bar button");
-  const windows = document.querySelectorAll(".tab-window")
-
-  buttons.forEach(button => {
-    if (button.classList.contains("tab-active")) button.classList.remove("tab-active");
-  });
-
-  element.classList.add("tab-active")
-
-  windows.forEach(window => {
-    if (window.classList.contains("tab-active")) window.classList.remove("tab-active")
-    if (window.classList.contains(body)) window.classList.add("tab-active")
-  })
-
-  readMoreFunc();
-  
-  if (body == "tab-preview") {
-    let preview = document.querySelector(".tab-preview")
-    let req = new XMLHttpRequest();
-    let url = "/markdown";
-    let param = "data=" + document.querySelector("#data").value.replaceAll("&", "%26");
-
-    req.onreadystatechange = () => {
-      if (req.readyState == 4 && req.status == 200) {
-        let title = document.querySelector("#title").value;
-        let description = document.querySelector("#description").value;
-        let banner = `<div class="post-banner"><div class="post-banner-top"><h1>${title}</h1></div><hr><p class "post-banner-description">${description}</p></div>`
-        preview.innerHTML = banner + '<div class="markdown-body">' + req.responseText + '</div>';
-      }
-    }
-
-    req.open("POST", url, true)
-    req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    req.send(param);
+function checkSubmit(event) {
+  if (event.keyCode == 13 && !event.shiftKey) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.parentNode.submit()
   }
 }
-*/
+
+const textarea = document.querySelector("textarea");
+textarea.addEventListener('keydown', autoGrow);
+textarea.addEventListener('keydown', checkSubmit)
+
+if (textarea) {
+  autoGrow.call(textarea)
+}
+
+// allow new line
+
+const msgContent = document.querySelectorAll(".msg-content .msg-body");
+msgContent.forEach(msg => {
+  msg.innerHTML = msg.innerHTML.replaceAll("&lt;br&gt;", "<br>");
+});
+
+// scroll to bottom
+
+const msgContainers = document.querySelectorAll(".msg-container")
+
+function scrollBottom(element) {
+  window.setTimeout(() => {
+    element.scrollTo({top: element.scrollHeight});
+  }, 0);
+}
+
+msgContainers.forEach(container => scrollBottom(container))
 
 // (de)activate passwords in settings
 

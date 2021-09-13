@@ -25,7 +25,7 @@
                 {% endif %}
                 <span class="msg-time">{{ moment(message.timestamp).format("DD MMM, HH:mm") }}</span>
               </p>
-              <p>{{ message.content }}</p>
+              <p class="msg-body">{{ message.content }}</p>
             </div>
           </div>
         {% endfor %}
@@ -33,7 +33,12 @@
        <form action="" method="POST">
         <input type="hidden" name="target" value="{{ user.username }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="text" name="content" placeholder="Enter message for {{ user.first_name }} {{ user.last_name }}" {{ not n and 'autofocus' or '' }}>
+        <textarea
+          name="content"
+          placeholder="Enter message for {{ user.first_name }} {{ user.last_name }}"
+          {{ not n and 'autofocus' or '' }}
+          required
+        ></textarea>
         <button type="submit">Send</button>
       </form>
      </div>

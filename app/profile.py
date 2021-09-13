@@ -143,6 +143,8 @@ def inbox(username):
     target = request.form.get("target")
     content = request.form.get("content")
 
+    content = content.replace("\n", "<br>")
+
     target = User.query.filter_by(username=target).first_or_404()
     msg = Message(content=content, sender=current_user, target=target)
 
