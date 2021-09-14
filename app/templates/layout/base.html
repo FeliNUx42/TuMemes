@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/matches.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/lists.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,8 +35,8 @@
       <li><a id="logout" href="{{ url_for('auth.logout') }}">Logout</a></li>
       <li class="nav-profile">
         <figure class="nav-collapse-button"><img src="{{ url_for('static', filename='profile_pictures/'+current_user.profile_pic) }}" alt="Profile"></figure>
-        {% if current_user.new_matches() or current_user.new_messages() %}
-          <div class="notification">{{ current_user.new_matches() + current_user.new_messages() }}</div>
+        {% if current_user.new_likes() or current_user.new_messages() %}
+          <div class="notification">{{ current_user.new_likes() + current_user.new_messages() }}</div><!-- change -->
         {% endif %}
       </li>
       {% else %}
@@ -67,15 +67,25 @@
         </a>
       </li>
       <li>
-        <a href="{{ url_for('profile.matches', username=current_user.username) }}">
+        <a href="{{ url_for('profile.likes', username=current_user.username) }}">
           <div><i class="fa fa-heart"></i>
+            <p>Your Likes</p>
+          </div>
+          {% if current_user.new_likes() %}
+          <span>{{ current_user.new_likes() }} new</span>
+          {% endif %}
+        </a>
+      </li>
+      {# <li>
+        <a href="{{ url_for('profile.matches', username=current_user.username) }}">
+          <div><i class="fa fa-infinity"></i>
             <p>Your Matches</p>
           </div>
           {% if current_user.new_matches() %}
           <span>{{ current_user.new_matches() }} new</span>
           {% endif %}
         </a>
-      </li>
+      </li> #}
       <li>
         <a href="{{ url_for('profile.prof', username=current_user.username) }}">
           <div><i class="fas fa-user"></i>

@@ -5,11 +5,11 @@
 }
 
 
-main .match-list {
+main .user-list-list {
   font-family: Helvetica, sans-serif;
 }
 
-main .match-banner {
+main .user-list-banner {
   background-color: #eee;
   border-radius: 3px;
   margin-bottom: 20px;
@@ -19,11 +19,11 @@ main .match-banner {
   align-items: center;
 }
 
-main .match-unread {
+main .user-list-unread {
   background-color: #ddd;
 }
 
-main .match-banner figure {
+main .user-list-banner figure {
   height: 40px;
   width: 40px;
   overflow: hidden;
@@ -33,16 +33,16 @@ main .match-banner figure {
   background-color: black;
 }
 
-main .match-banner img {
+main .user-list-banner img {
   height: 100%;
 }
 
-main .match-banner div {
+main .user-list-banner div {
   display: flex;
   align-items: center;
 }
 
-main .match-banner h1 {
+main .user-list-banner h1 {
   margin-bottom: 0;
   margin-top: 5px;
   margin-left: 20px;
@@ -50,27 +50,27 @@ main .match-banner h1 {
   color: #777;
 }
 
-main .match-banner h1 b {
+main .user-list-banner h1 b {
  color: #000;
 }
 
-main .match-banner h1 .match-timestamp {
+main .user-list-banner h1 .user-list-timestamp {
   font-weight: 100;
   font-size: 20px;
   margin-left: 10px;
 }
 
-main .match-banner i {
+main .user-list-banner i {
   font-size: 26px;
   color: #800;
   transition: all .7s ease-in-out;
 }
 
-main .match-banner i:hover {
+main .user-list-banner i:hover {
   cursor: pointer;
 }
 
-main .match-banner i.fas {
+main .user-list-banner i.fas {
   transform: rotate3d(1, 1, 1, 360deg);
   color: #c00;
 }

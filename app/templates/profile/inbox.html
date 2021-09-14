@@ -8,7 +8,7 @@
     {% for n, user in enumerate(current_user.contacts()) %}
     <div class="msg-sender {{ not n and 'current-sender' or '' }}" target="chat-{{ user.id }}">
       <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
-      <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+      <h1>{{ user.first_name }} {{ user.last_name }}{% if current_user.new_messages(user) %}<span>{{ current_user.new_messages(user) }} new</span>{% endif %}</h1>
     </div>
     {% endfor %}
   </div>

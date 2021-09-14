@@ -13,9 +13,9 @@
       <p>{{ user.meme_taste }}</p>
       {% if current_user.is_authenticated %}
       <i
-        class="{{ 'fas' if current_user.matching(user) else 'far'}} fa-heart match"
+        class="{{ 'fas' if current_user.liking(user) else 'far'}} fa-heart like"
         param="target={{ user.username }}&csrf_token={{ csrf_token() }}"
-        url="{{ url_for('profile.match', username=current_user.username) }}"
+        url="{{ url_for('profile.like', username=current_user.username) }}"
       ></i>
       {% else %}
       <i class="far fa-heart" onclick="window.location='/login'"></i>

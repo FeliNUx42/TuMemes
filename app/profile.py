@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 import re
-from .models import Message, User, Match
+from .models import Message, User, Like
 from .utils import save_file, valid_picture
 from . import db
 
@@ -97,9 +97,9 @@ def settings(username):
   return render_template("profile/settings.html")
 
 
-@profile.route('/<username>/match', methods=['POST'])
+@profile.route('/<username>/like', methods=['POST'])
 @login_required
-def match(username):
+def like(username):
   user = User.query.filter_by(username=username).first_or_404()
 
   if current_user != user:
@@ -111,25 +111,25 @@ def match(username):
   if not target:
     abort(500)
 
-  if user.matching(target):
-    user.unmatch(target)
+  if user.liking(target):
+    user.dislike(target)
   else:
-    user.match(target)
+    user.like(target)
   
   return "success"
 
-@profile.route('/<username>/matches')
+@profile.route('/<username>/likes')
 @login_required
-def matches(username):
+def likes(username):
   page = request.args.get("page", 1, type=int)
   user = User.query.filter_by(username=username).first_or_404()
 
   if current_user != user:
     abort(403)
   
-  matches = user.match_inbox.order_by(Match.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
+  likes = user.like_inbox.order_by(Like.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
 
-  return render_template("profile/matches.html", matches=matches)
+  return render_template("profile/likes.html", likes=likes)
 
 @profile.route('/<username>/inbox', methods=["GET", "POST"])
 @login_required

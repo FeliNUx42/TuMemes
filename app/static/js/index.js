@@ -7,7 +7,6 @@ btn.addEventListener("click", () => {
   nav.classList.toggle("nav-active");
 });
 
-
 // close alerts
 
 function alertClose (element) {
@@ -20,8 +19,8 @@ function expandSearch() {
   document.querySelector("main .search form").classList.toggle("expand");
 }
 
-// make a match
-const hearts = document.querySelectorAll(".match")
+// like a user
+const hearts = document.querySelectorAll(".like")
 hearts.forEach(heart => {
   heart.addEventListener("click", () => {
     heart.classList.toggle("fas");

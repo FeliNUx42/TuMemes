@@ -22,7 +22,10 @@ def login():
     if user and user.verify_password(password):
       login_user(user, remember=True)
       flash("Logged in successfully.", category="success")
-      return redirect(url_for("profile.prof", username=current_user.username))
+      
+      next = request.args.get('next')
+
+      return redirect(next or url_for("profile.prof", username=user.username))
     else :
       flash("Invalid username or password. Try again.", category="error")
 

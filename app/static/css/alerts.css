@@ -18,6 +18,7 @@
   padding: 0 30px;
   margin-bottom: 10px;
   border: 2px solid black;
+  border-radius: 3px;
   font-weight: 900;
 }
 
@@ -55,6 +56,6 @@
   color: #600;
 }
 
-.alert-hidden {
+.alerts .alert-hidden {
   display: none;
 }

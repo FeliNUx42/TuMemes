@@ -12,7 +12,7 @@
 }
 
 .msg-senders {
-  width: 350px;
+  width: 380px;
   height: 100%;
   overflow-y: auto;
   background-color: #fff;
@@ -44,7 +44,7 @@
   width: 40px;
   overflow: hidden;
   border-radius: 50%;
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   background-color: black;
   margin-right: 20px;
@@ -58,6 +58,20 @@
   font-size: 22px;
   color: #777;
   margin-bottom: 0;
+  flex: 1;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.msg-sender h1 span {
+  background-color: #00b1a8;
+  color: #fff;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  border-radius: 3px;
 }
 
 .msg-chats {

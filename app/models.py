@@ -8,7 +8,7 @@ from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
-class Match(db.Model):
+class Like(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   read = db.Column(db.Boolean, default=False)
   timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -17,7 +17,7 @@ class Match(db.Model):
   sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
   def __repr__(self):
-    return f'<Match({self.id}, {self.sender.username}, {self.target.username})>'
+    return f'<Like({self.id}, {self.sender.username}, {self.target.username})>'
 
 
 class Message(db.Model):
@@ -53,44 +53,46 @@ class User(db.Model, UserMixin):
   meme_2 = db.Column(db.String(255), default="meme.png")
   meme_3 = db.Column(db.String(255), default="meme.png")
 
-  match_inbox = db.relationship("Match", foreign_keys='Match.target_id', backref='target', lazy="dynamic")
-  match_sent = db.relationship("Match", foreign_keys='Match.sender_id', backref='sender', lazy="dynamic")
+  like_inbox = db.relationship("Like", foreign_keys='Like.target_id', backref='target', lazy="dynamic")
+  like_sent = db.relationship("Like", foreign_keys='Like.sender_id', backref='sender', lazy="dynamic")
 
   msg_inbox = db.relationship("Message", foreign_keys='Message.target_id', backref='target', lazy="dynamic")
   msg_sent = db.relationship("Message", foreign_keys='Message.sender_id', backref='sender', lazy="dynamic")
 
   def is_match(self, user):
-    inbox = self.match_inbox.filter(Match.sender == user).count() > 0
-    sent = self.match_sent.filter(Match.target == user).count() > 0
+    inbox = self.like_inbox.filter(Like.sender == user).count() > 0
+    sent = self.like_sent.filter(Like.target == user).count() > 0
     return inbox and sent
   
-  def matching(self, user):
-    return self.match_sent.filter(Match.target == user).count() > 0
+  def liking(self, user):
+    return self.like_sent.filter(Like.target == user).count() > 0
 
-  def match(self, user):
-    if self.match_sent.filter(Match.target == user).count() > 0:
+  def like(self, user):
+    if self.like_sent.filter(Like.target == user).count() > 0:
       return
     if self == user:
       return
-    m = Match(sender=self, target=user)
+    m = Like(sender=self, target=user)
 
     db.session.add(m)
     db.session.commit()
 
-  def unmatch(self, user):
-    if self.match_sent.filter(Match.sender == self).count() == 0:
+  def dislike(self, user):
+    if self.like_sent.filter(Like.sender == self).count() == 0:
       return
     if self == user:
       return
-    m = self.match_sent.filter(Match.target == user).first()
+    m = self.like_sent.filter(Like.target == user).first()
 
     db.session.delete(m)
     db.session.commit()
   
-  def new_matches(self):
-    return self.match_inbox.filter(Match.read == False).count()
+  def new_likes(self):
+    return self.like_inbox.filter(Like.read == False).count()
   
   def new_messages(self, sender=None):
+    if sender:
+      return self.msg_inbox.filter(Message.read == False, Message.sender == sender).count()
     return self.msg_inbox.filter(Message.read == False).count()
   
   def contacts(self):
@@ -102,7 +104,7 @@ class User(db.Model, UserMixin):
     messages = Message.query.filter(or_(Message.target == self, Message.sender == self))\
       .filter(or_(Message.target == target, Message.sender == target))
     
-    return messages.order_by(Message.timestamp.asc()).limit(100).all()
+    return messages.order_by(Message.timestamp.asc()).limit(current_app.config["LOAD_MESSAGES"]).all()
   
   def send_message(self, content, target):
     msg = Message(content=content, sender=self, target=target)

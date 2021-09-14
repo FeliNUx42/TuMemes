@@ -5,13 +5,13 @@
 {% block content %}
   <h1>Matches ({{ current_user.new_matches() }} new)</h1>
 
-  <div class="match-list">
+  <div class="user-list-list">
     {% for match in matches.items %}
     {% set user = match.sender %}
-    <div class="match-banner match-{{ 'read' if match.read else 'unread'}}">
+    <div class="user-list-banner user-list-{{ 'read' if match.read else 'unread'}}">
       <div>
         <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
-        <h1><b>{{ user.first_name }} {{ user.last_name }}</b> liked you. <span class="match-timestamp">{{ moment(match.timestamp).fromNow() }}</span></h1>
+        <h1><b>{{ user.first_name }} {{ user.last_name }}</b> liked you. <span class="user-list-timestamp">{{ moment(match.timestamp).fromNow() }}</span></h1>
       </div>
       <i
         class="{{ 'fas' if current_user.matching(user) else 'far'}} fa-heart match"

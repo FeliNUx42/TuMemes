@@ -23,12 +23,12 @@ login_manager.needs_refresh_message_category = "error"
 
 @login_manager.user_loader
 def load_user(id):
-  from .models import User, Match, Message
+  from .models import User, Like, Message
   return User.query.get(int(id))
 
 
 def create_app():
-  from .models import User, Message
+  from .models import User, Like, Message
 
   app = Flask(__name__)
   app.config.from_object(Config)
@@ -48,15 +48,21 @@ def create_app():
   
   @app.after_request
   def read_things(response):
+    if request.endpoint == "profile.likes":
+      for like in current_user.like_inbox.all():
+        like.read = True
+      
+      db.session.commit()
+    
     if request.endpoint == "profile.matches":
-      for match in current_user.match_inbox.all():
+      for match in current_user.like_inbox.all(): #change
         match.read = True
       
       db.session.commit()
     
     if request.endpoint == "profile.inbox":
       for msg in current_user.msg_inbox.all():
-        msg.read = False #change
+        msg.read = True
       
       db.session.commit()
     
