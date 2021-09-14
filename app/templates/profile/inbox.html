@@ -5,16 +5,38 @@
 {% block wrapper %}
 <div class="msg-inbox">
   <div class="msg-senders">
+    {% if new_sender %}
+    <div class="msg-sender current-sender" target="chat-{{ new_sender.id }}">
+      <figure><img src="{{ url_for('static', filename='profile_pictures/'+new_sender.profile_pic) }}" alt="Profile"></figure>
+      <h1>{{ new_sender.first_name }} {{ new_sender.last_name }}</h1>
+    </div>
+    {% endif %}
     {% for n, user in enumerate(current_user.contacts()) %}
-    <div class="msg-sender {{ not n and 'current-sender' or '' }}" target="chat-{{ user.id }}">
+    <div class="msg-sender {{ not (new_sender or n) and 'current-sender' or '' }}" target="chat-{{ user.id }}">
       <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
       <h1>{{ user.first_name }} {{ user.last_name }}{% if current_user.new_messages(user) %}<span>{{ current_user.new_messages(user) }} new</span>{% endif %}</h1>
     </div>
     {% endfor %}
   </div>
   <div class="msg-chats">
+    {% if new_sender %}
+    <div id="chat-{{ new_sender.id }}" class="msg-chat current-chat">
+      <div class="msg-container"></div>
+      <form action="" method="POST">
+       <input type="hidden" name="target" value="{{ new_sender.username }}">
+       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+       <textarea
+         name="content"
+         placeholder="Enter message for {{ new_sender.first_name }} {{ new_sender.last_name }}"
+         autofocus
+         required
+       ></textarea>
+       <button type="submit">Send</button>
+     </form>
+    </div>
+    {% endif %}
     {% for n, user in enumerate(current_user.contacts()) %}
-     <div id="chat-{{ user.id }}" class="msg-chat {{ not n and 'current-chat' or '' }}">
+     <div id="chat-{{ user.id }}" class="msg-chat {{ not (new_sender or n) and 'current-chat' or '' }}">
        <div class="msg-container">
           {% for message in current_user.chat(user) %}
           <div class="msg-box sender-{{ message.sender == current_user and 'me' or 'other' }}">
@@ -36,7 +58,7 @@
         <textarea
           name="content"
           placeholder="Enter message for {{ user.first_name }} {{ user.last_name }}"
-          {{ not n and 'autofocus' or '' }}
+          {{ not (new_sender or n) and 'autofocus' or '' }}
           required
         ></textarea>
         <button type="submit">Send</button>

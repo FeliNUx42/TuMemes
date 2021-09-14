@@ -74,7 +74,8 @@ form #data {
   resize: none;
 }
 
-form button {
+form button, a.link-button {
+  text-decoration: none;
   padding: 10px 15px;
   font-size: 16px;
   border: none;

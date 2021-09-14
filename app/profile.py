@@ -148,7 +148,33 @@ def inbox(username):
     target = User.query.filter_by(username=target).first_or_404()
     msg = Message(content=content, sender=current_user, target=target)
 
+    if not current_user.is_match(target):
+      abort(403)
+
     db.session.add(msg)
     db.session.commit()
   
-  return render_template("profile/inbox.html")
+  new_sender = None
+  if request.method == "GET":
+    new_sender = User.query.filter_by(username=request.args.get("target")).first()
+
+    if new_sender and not current_user.is_match(new_sender):
+      abort(403)
+
+    if new_sender in current_user.contacts():
+      new_sender = None
+  
+  return render_template("profile/inbox.html", new_sender=new_sender)
+
+@profile.route('/<username>/matches')
+@login_required
+def matches(username):
+  page = request.args.get("page", 1, type=int)
+  user = User.query.filter_by(username=username).first_or_404()
+
+  if current_user != user:
+    abort(403)
+  
+  matches = user.new_matches(extend=True).order_by(Like.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
+
+  return render_template("profile/matches.html", matches=matches)

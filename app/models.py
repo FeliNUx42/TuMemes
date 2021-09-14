@@ -90,6 +90,21 @@ class User(db.Model, UserMixin):
   def new_likes(self):
     return self.like_inbox.filter(Like.read == False).count()
   
+  def new_matches(self, extend=False, unread=False):
+    rcv = list(map(lambda x: (x.id, x.sender.id), self.like_inbox.all()))
+    snt = list(map(lambda x: (x.id, x.target.id), self.like_sent.all()))
+    matches = list(filter(lambda lst: lst[1] in [i[1] for i in snt], rcv))
+
+    matches = Like.query.filter(Like.id.in_([i[0] for i in matches]))
+
+    if unread:
+      return matches.filter_by(read=False).count()
+
+    if not extend:
+      return matches.count()
+
+    return matches
+
   def new_messages(self, sender=None):
     if sender:
       return self.msg_inbox.filter(Message.read == False, Message.sender == sender).count()

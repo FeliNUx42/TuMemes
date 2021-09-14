@@ -55,7 +55,7 @@ def create_app():
       db.session.commit()
     
     if request.endpoint == "profile.matches":
-      for match in current_user.like_inbox.all(): #change
+      for match in current_user.new_matches(extend=True).all():
         match.read = True
       
       db.session.commit()
