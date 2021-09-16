@@ -60,17 +60,17 @@ main .user-list-banner h1 .user-list-timestamp {
   margin-left: 10px;
 }
 
-main i {
+main i.like {
   font-size: 26px;
   color: #800;
   transition: all .7s ease-in-out;
 }
 
-main i:hover {
+main i.like:hover {
   cursor: pointer;
 }
 
-main i.fas {
+main i.like.fas {
   transform: rotate3d(1, 1, 1, 360deg);
   color: #c00;
 }
