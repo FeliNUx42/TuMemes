@@ -41,7 +41,8 @@ def create_app():
 
   @app.before_request
   def check_session():
-    if request.path == "/": return
+    if request.endpoint == "home.index": return
+    if request.endpoint == "static": return
 
     if session.get("SEARCH_QUERY"):
       del session["SEARCH_QUERY"]

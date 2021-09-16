@@ -16,16 +16,7 @@ home = Blueprint('home', __name__)
       del session["SEARCH_QUERY"]
 """
 
-def get_result():
-  name = request.form.get("name")
-  description = request.form.get("description")
-  #gender = request.form.get("gender")
-  memes = request.form.get("memes")
-  min_age = request.form.get("min-age")
-  max_age = request.form.get("max-age")
-  country = request.form.get("country")
-  city = request.form.get("city")
-
+def get_result(name, description, memes, min_age, max_age, country, city):
   result = User.query
 
   if name:
@@ -52,12 +43,36 @@ def get_result():
 
 @home.route('/', methods=["GET", "POST"])
 def index():
-  search = request.args.get("search")
   page = request.args.get("page", 1, type=int)
   per_page = request.args.get("per-page", current_app.config['RESULTS_PER_PAGE'], type=int)
+  
+  name = request.form.get("name")
+  description = request.form.get("description")
+  #gender = request.form.get("gender")
+  memes = request.form.get("memes")
+  min_age = request.form.get("min-age")
+  max_age = request.form.get("max-age")
+  country = request.form.get("country")
+  city = request.form.get("city")
+
 
   if not current_user.is_authenticated: current_user.username = ""
-  result = get_result().order_by(User.created.desc()).paginate(page, per_page, True)
+  query = session.get("SEARCH_QUERY")
+  new_query = {
+    "name":name,
+    "description":description,
+    "memes":memes,
+    "min_age":min_age,
+    "max_age":max_age,
+    "country":country,
+    "city":city
+  }
+  if query and not any(new_query.values()):
+    result = get_result(**query)
+  else:
+    result = get_result(**new_query)
+    session["SEARCH_QUERY"] = new_query
+  result = result.filter(User.username != current_user.username).order_by(User.created.desc()).paginate(page, per_page, True)
 
   return render_template("main/home.html", result=result)
 
