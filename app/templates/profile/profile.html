@@ -7,7 +7,7 @@
   <figure>
     <img src="{{ url_for('static', filename='profile_pictures/'+author.profile_pic) }}" alt="Profile Picture">
   </figure>
-  <h1>{{ author.first_name }} {{ author.last_name }}
+  <h1>{{ author.full_name }}
     {% if current_user.is_authenticated and current_user != author %}
     <i
       class="{{ 'fas' if current_user.liking(author) else 'far'}} fa-heart like"

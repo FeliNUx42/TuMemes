@@ -50,8 +50,7 @@ def create_user():
   l = names.get_last_name()
   u.email = f"{f}.{l}@gmail.mom"
   u.username = f"{f}-{l}"
-  u.first_name = f
-  u.last_name = l
+  u.full_name = f"{f} {l}"
   u.birthday = date(2001, 1, 1)
   u.password = "12345678"
 

@@ -9,7 +9,7 @@
       alt=""
     >
     <div class="user-data">
-      <h1>{{ user.first_name }} {{ user.last_name }}, {{ user.age }}</h1>
+      <h1>{{ user.full_name }}, {{ user.age }}</h1>
       <p>{{ user.meme_taste }}</p>
       {% if current_user.is_authenticated %}
       <i

@@ -23,34 +23,30 @@ def settings(username):
 
   if request.method == "POST":
     username = request.form.get("username").strip() or ""
-    first_name = request.form.get("firstName").strip() or ""
-    last_name = request.form.get("lastName").strip() or ""
+    full_name = request.form.get("full-name").strip() or ""
     city = request.form.get("city").strip() or "not specified"
     country = request.form.get("country").strip() or "not specified"
     description = request.form.get("description").strip() or "not specified"
     meme_taste = request.form.get("meme-taste").strip() or "not specified"
 
-    profile_pic = request.files.get("profilePic")
+    profile_pic = request.files.get("profile-pic")
     meme_1 = request.files.get("meme-1")
     meme_2 = request.files.get("meme-2")
     meme_3 = request.files.get("meme-3")
 
     change_pwd = request.form.get("activate-pwd") == "on"
-    password1 = request.form.get("password1")
-    password2 = request.form.get("password2")
+    password1 = request.form.get("password-1")
+    password2 = request.form.get("password-2")
 
     if False: # valid_username()
       flash("This username already exists. Try another one.", category="error")
-    elif not re.search(r"\S{2,}", first_name):
-      flash("First Name is too short.", category="error")
-    elif not re.search(r"\S{2,}", last_name):
-      flash("Last Name is too short.", category="error")
+    elif not re.search(r"\S{2,}", full_name):
+      flash("Name is too short.", category="error")
     elif len(description) < 10:
       flash("Description is too short.", category="error")
     else:
       user.username = username
-      user.first_name = first_name
-      user.last_name = last_name
+      user.full_name = full_name
       user.city = city
       user.country = country
       user.meme_taste = meme_taste
@@ -169,7 +165,7 @@ def inbox(username):
 @profile.route('/<username>/matches')
 @login_required
 def matches(username):
-  page = request.args.get("page", 1, type=int)
+  return """page = request.args.get("page", 1, type=int)
   user = User.query.filter_by(username=username).first_or_404()
 
   if current_user != user:
@@ -177,4 +173,4 @@ def matches(username):
   
   matches = user.new_matches(extend=True).order_by(Like.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
 
-  return render_template("profile/matches.html", matches=matches)
+  return render_template("profile/matches.html", matches=matches)"""

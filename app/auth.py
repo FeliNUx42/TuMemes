@@ -40,20 +40,17 @@ def signup():
   if request.method == "POST":
     email = request.form.get('email').strip()
     username = request.form.get('username').strip()
-    first_name = request.form.get('firstName').strip()
-    last_name = request.form.get('lastName').strip()
+    full_name = request.form.get('full-name').strip()
     birthday = request.form.get('birthday').strip()
-    password1 = request.form.get('password1').strip()
-    password2 = request.form.get('password2').strip()
+    password1 = request.form.get('password-1').strip()
+    password2 = request.form.get('password-2').strip()
 
     if not valid_email(email):
       flash("This email is invalid or already exists. Try another one.", category="error")
     elif False: # valid_username()
       flash("This username already exists. Try another one.", category="error")
-    elif not re.search(r"\S{2,}", first_name):
-      flash("First Name is too short.", category="error")
-    elif not re.search(r"\S{2,}", last_name):
-      flash("Last Name is too short.", category="error")
+    elif not re.search(r"\S{2,}", full_name):
+      flash("Name is too short.", category="error")
     elif not valid_date(birthday):
       flash("Error while reading date of birth. Try again.")
     elif len(password1) < 8:
@@ -64,8 +61,7 @@ def signup():
       user = User()
       user.email = email
       user.username = username
-      user.first_name = first_name
-      user.last_name = last_name
+      user.full_name = full_name
       user.birthday = date.fromisoformat(birthday)
       user.password = password1
 

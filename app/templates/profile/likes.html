@@ -11,7 +11,7 @@
     <div class="user-list-banner user-list-{{ 'read' if like.read else 'unread'}}">
       <div>
         <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Proflikeile"></figure>
-        <h1><b>{{ user.first_name }} {{ user.last_name }}</b> liked you. <span class="user-list-timestamp">{{ moment(like.timestamp).fromNow() }}</span></h1>
+        <h1><b>{{ user.full_name }}</b> liked you. <span class="user-list-timestamp">{{ moment(like.timestamp).fromNow() }}</span></h1>
       </div>
       <i
         class="{{ 'fas' if current_user.liking(user) else 'far'}} fa-heart like"

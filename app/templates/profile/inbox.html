@@ -8,13 +8,13 @@
     {% if new_sender %}
     <div class="msg-sender current-sender" target="chat-{{ new_sender.id }}">
       <figure><img src="{{ url_for('static', filename='profile_pictures/'+new_sender.profile_pic) }}" alt="Profile"></figure>
-      <h1>{{ new_sender.first_name }} {{ new_sender.last_name }}</h1>
+      <h1>{{ new_sender.full_name }}</h1>
     </div>
     {% endif %}
     {% for n, user in enumerate(current_user.contacts()) %}
     <div class="msg-sender {{ not (new_sender or n) and 'current-sender' or '' }}" target="chat-{{ user.id }}">
       <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
-      <h1>{{ user.first_name }} {{ user.last_name }}{% if current_user.new_messages(user) %}<span>{{ current_user.new_messages(user) }} new</span>{% endif %}</h1>
+      <h1>{{ user.full_name }}{% if current_user.new_messages(user) %}<span>{{ current_user.new_messages(user) }} new</span>{% endif %}</h1>
     </div>
     {% endfor %}
   </div>
@@ -27,7 +27,7 @@
        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
        <textarea
          name="content"
-         placeholder="Enter message for {{ new_sender.first_name }} {{ new_sender.last_name }}"
+         placeholder="Enter message for {{ new_sender.full_name }}"
          autofocus
          required
        ></textarea>
@@ -43,7 +43,7 @@
             <div class="msg-content">
               <p class="msg-header">
                 {% if message.sender != current_user %}
-                <span class="msg-author">{{ user.first_name }} {{ user.last_name }}</span>
+                <span class="msg-author">{{ user.full_name }}</span>
                 {% endif %}
                 <span class="msg-time">{{ moment(message.timestamp).format("DD MMM, HH:mm") }}</span>
               </p>
@@ -57,7 +57,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <textarea
           name="content"
-          placeholder="Enter message for {{ user.first_name }} {{ user.last_name }}"
+          placeholder="Enter message for {{ user.full_name }}"
           {{ not (new_sender or n) and 'autofocus' or '' }}
           required
         ></textarea>

@@ -53,7 +53,7 @@
   {% if current_user.is_authenticated %}
   <aside class="nav-collapse">
     <figure><img src="{{ url_for('static', filename='profile_pictures/'+current_user.profile_pic) }}" alt="Profile"></figure>
-    <h1>{{ current_user.first_name }} {{ current_user.last_name }}</h1>
+    <h1>{{ current_user.full_name }}</h1>
     <h2>{{ current_user.email }}</h2>
     <ul>
       <li>

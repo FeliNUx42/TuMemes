@@ -29,7 +29,7 @@ def get_result():
   result = User.query
 
   if name:
-    result = result.filter(or_(User.first_name.ilike(f"%{name}%"), User.last_name.ilike(f"%{name}%")))
+    result = result.filter(User.full_name.ilike(f"%{name}%"))
   if description:
     result = result.filter(User.description.ilike(f"%{description}%"))
   #if gender:
