@@ -7,7 +7,17 @@
   <figure>
     <img src="{{ url_for('static', filename='profile_pictures/'+author.profile_pic) }}" alt="Profile Picture">
   </figure>
-  <h1>{{ author.first_name }} {{ author.last_name }}</h1>
+  <h1>{{ author.first_name }} {{ author.last_name }}
+    {% if current_user.is_authenticated and current_user != author %}
+    <i
+      class="{{ 'fas' if current_user.liking(author) else 'far'}} fa-heart like"
+      param="target={{ author.username }}&csrf_token={{ csrf_token() }}"
+      url="{{ url_for('profile.like', username=current_user.username) }}"
+    ></i>
+    {% elif not current_user.is_authenticated %}
+    <i class="far fa-heart" onclick="window.location='/login'"></i>
+    {% endif %}
+  </h1>
   <p>{{ author.description }}</p>
   <h2>{{ author.username }}</h3>
   <hr>

@@ -37,7 +37,7 @@ main .search form {
 }
 
 main .search form.expand {
-  height: 648px;
+  height: 556px;
   padding: 20px 30px;
   border-top: 2px solid #aaa;
   margin: 0;
