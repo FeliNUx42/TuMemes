@@ -23,12 +23,12 @@ login_manager.needs_refresh_message_category = "error"
 
 @login_manager.user_loader
 def load_user(id):
-  from .models import User, Like, Message
+  from .models import User
   return User.query.get(int(id))
 
 
 def create_app():
-  from .models import User, Like, Message
+  from .models import User, Like, Match, Message
 
   app = Flask(__name__)
   app.config.from_object(Config)
