@@ -35,8 +35,8 @@
       <li><a id="logout" href="{{ url_for('auth.logout') }}">Logout</a></li>
       <li class="nav-profile">
         <figure class="nav-collapse-button"><img src="{{ url_for('static', filename='profile_pictures/'+current_user.profile_pic) }}" alt="Profile"></figure>
-        {% if current_user.new_likes() or current_user.new_messages() or current_user.new_matches(unread=True) %}
-          <div class="notification">{{ current_user.new_likes() + current_user.new_messages() + current_user.new_matches(unread=True) }}</div>
+        {% if current_user.new_likes() or current_user.new_messages() or current_user.new_matches() %}
+          <div class="notification">{{ current_user.new_likes() + current_user.new_messages() + current_user.new_matches() }}</div>
         {% endif %}
       </li>
       {% else %}
@@ -81,8 +81,8 @@
           <div><i class="fa fa-infinity"></i>
             <p>Your Matches</p>
           </div>
-          {% if current_user.new_matches(unread=True) %}
-          <span>{{ current_user.new_matches(unread=True) }} new</span>
+          {% if current_user.new_matches() %}
+          <span>{{ current_user.new_matches() }} new</span>
           {% endif %}
         </a>
       </li>

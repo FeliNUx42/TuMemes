@@ -3,15 +3,15 @@
 {% block title %}Matches - {{ current_user.username }}{% endblock title %}
 
 {% block content %}
-  <h1>Matches ({{ current_user.new_matches() }} new)</h1>
+  <h1>Matches ({{ matches.total }} new)</h1>
 
   <div class="user-list-list">
     {% for match in matches.items %}
-    {% set user = match.sender %}
-    <div class="user-list-banner user-list-{{ 'read' if match.read else 'unread'}}">
+    {% set user = match.other(current_user) %}
+    <div class="user-list-banner user-list-{{ 'read' if match.read_by(current_user) else 'unread'}}">
       <div>
         <figure><img src="{{ url_for('static', filename='profile_pictures/'+user.profile_pic) }}" alt="Profile"></figure>
-        <h1><b>{{ user.full_name }}</b> and you are matching.</h1>
+        <h1><b>{{ user.full_name }}</b> and you are matching. <span class="user-list-timestamp">{{ moment(match.timestamp).fromNow() }}</span></h1>
       </div>
       <a href="{{ url_for('profile.inbox', username=current_user.username, target=user.username)}}" class="link-button">Send a message</a>
     </div>
@@ -22,9 +22,9 @@
     {% for page_num in matches.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
     {% if page_num %}
       {% if page_num == matches.page %}
-      <a class="pagination-link current-page" href="{{ url_for('home.index', page=page_num) }}">{{ page_num }}</a>
+      <a class="pagination-link current-page" href="{{ url_for(request.endpoint, username=current_user.username, page=page_num) }}">{{ page_num }}</a>
       {% else %}
-      <a class="pagination-link" href="{{ url_for('home.index', page=page_num) }}">{{ page_num }}</a>
+      <a class="pagination-link" href="{{ url_for(request.endpoint, username=current_user.username, page=page_num) }}">{{ page_num }}</a>
       {% endif %}
     {% else %}
     ...

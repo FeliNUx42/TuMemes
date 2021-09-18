@@ -56,8 +56,12 @@ def create_app():
       db.session.commit()
     
     if request.endpoint == "profile.matches":
-      for match in current_user.new_matches(extend=True).all():
-        match.read = True
+      matches = current_user.match_1.union(current_user.match_2).all()
+      for match in matches:
+        if match.target_1 == current_user:
+          match.read_1 = True
+        else:
+          match.read_2 = True
       
       db.session.commit()
     

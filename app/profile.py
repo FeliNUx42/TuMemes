@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 import re
-from .models import Message, User, Like
+from .models import Match, Message, User, Like
 from .utils import save_file, valid_picture
 from . import db
 
@@ -107,11 +107,16 @@ def like(username):
   if not target:
     abort(500)
 
+  match = current_user.is_match(target)
+
   if user.liking(target):
     user.dislike(target)
   else:
     user.like(target)
   
+  if match != current_user.is_match(target):
+    return "reload"
+
   return "success"
 
 @profile.route('/<username>/likes')
@@ -165,12 +170,13 @@ def inbox(username):
 @profile.route('/<username>/matches')
 @login_required
 def matches(username):
-  return """page = request.args.get("page", 1, type=int)
+  page = request.args.get("page", 1, type=int)
   user = User.query.filter_by(username=username).first_or_404()
 
   if current_user != user:
     abort(403)
   
-  matches = user.new_matches(extend=True).order_by(Like.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
+  matches = user.match_1.union(user.match_2)
+  matches = matches.order_by(Match.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
 
-  return render_template("profile/matches.html", matches=matches)"""
+  return render_template("profile/matches.html", matches=matches)

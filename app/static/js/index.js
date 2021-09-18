@@ -30,6 +30,12 @@ hearts.forEach(heart => {
     let url = heart.attributes.url.value;
     let param = heart.attributes.param.value;
 
+    req.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200 && this.responseText == "reload") {
+        window.location.reload()
+      }
+    }
+
     req.open("POST", url, true)
     req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     req.send(param);

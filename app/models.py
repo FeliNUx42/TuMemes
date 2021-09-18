@@ -20,6 +20,33 @@ class Like(db.Model):
     return f'<Like({self.id}, {self.sender.username}, {self.target.username})>'
 
 
+class Match(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  read_1 = db.Column(db.Boolean, default=False)
+  read_2 = db.Column(db.Boolean, default=False)
+  timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
+
+  target_1_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  target_2_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+  def read_by(self, user):
+    if self.target_1 == user:
+      return self.read_1
+    elif self.target_2 == user:
+      return self.read_2
+    return None
+  
+  def other(self, user):
+    if self.target_1 == user:
+      return self.target_2
+    elif self.target_2 == user:
+      return self.target_1
+    return None
+
+  def __repr__(self):
+    return f'<Match({self.id}, {self.target_1.username}, {self.target_2.username})>'
+
+
 class Message(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   content = db.Column(db.String(4096))
@@ -54,14 +81,17 @@ class User(db.Model, UserMixin):
 
   like_inbox = db.relationship("Like", foreign_keys='Like.target_id', backref='target', lazy="dynamic")
   like_sent = db.relationship("Like", foreign_keys='Like.sender_id', backref='sender', lazy="dynamic")
+  
+  match_1 = db.relationship("Match", foreign_keys='Match.target_1_id', backref='target_1', lazy="dynamic")
+  match_2 = db.relationship("Match", foreign_keys='Match.target_2_id', backref='target_2', lazy="dynamic")
 
   msg_inbox = db.relationship("Message", foreign_keys='Message.target_id', backref='target', lazy="dynamic")
   msg_sent = db.relationship("Message", foreign_keys='Message.sender_id', backref='sender', lazy="dynamic")
 
   def is_match(self, user):
-    inbox = self.like_inbox.filter(Like.sender == user).count() > 0
-    sent = self.like_sent.filter(Like.target == user).count() > 0
-    return inbox and sent
+    m1 = self.match_1.filter(Match.target_2 == user).first()
+    m2 = self.match_2.filter(Match.target_1 == user).first()
+    return m1 or m2
   
   def liking(self, user):
     return self.like_sent.filter(Like.target == user).count() > 0
@@ -71,9 +101,13 @@ class User(db.Model, UserMixin):
       return
     if self == user:
       return
-    m = Like(sender=self, target=user)
+    l = Like(sender=self, target=user)
 
-    db.session.add(m)
+    if self.like_inbox.filter(Like.sender == user).first():
+      m = Match(target_1=self, target_2=user)
+      db.session.add(m)
+
+    db.session.add(l)
     db.session.commit()
 
   def dislike(self, user):
@@ -81,28 +115,23 @@ class User(db.Model, UserMixin):
       return
     if self == user:
       return
-    m = self.like_sent.filter(Like.target == user).first()
 
-    db.session.delete(m)
+    if self.is_match(user):
+      db.session.delete(self.is_match(user))
+
+    l = self.like_sent.filter(Like.target == user).first()
+
+    db.session.delete(l)
     db.session.commit()
   
   def new_likes(self):
     return self.like_inbox.filter(Like.read == False).count()
   
-  def new_matches(self, extend=False, unread=False):
-    rcv = list(map(lambda x: (x.id, x.sender.id), self.like_inbox.all()))
-    snt = list(map(lambda x: (x.id, x.target.id), self.like_sent.all()))
-    matches = list(filter(lambda lst: lst[1] in [i[1] for i in snt], rcv))
+  def new_matches(self):
+    m1 = self.match_1.filter(Match.read_1 == False).count()
+    m2 = self.match_2.filter(Match.read_2 == False).count()
 
-    matches = Like.query.filter(Like.id.in_([i[0] for i in matches]))
-
-    if unread:
-      return matches.filter_by(read=False).count()
-
-    if not extend:
-      return matches.count()
-
-    return matches
+    return m1 + m2
 
   def new_messages(self, sender=None):
     if sender:
