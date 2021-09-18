@@ -24,6 +24,7 @@ def settings(username):
   if request.method == "POST":
     username = request.form.get("username").strip() or ""
     full_name = request.form.get("full-name").strip() or ""
+    gender = request.form.get("gender").strip() or "not specified"
     city = request.form.get("city").strip() or "not specified"
     country = request.form.get("country").strip() or "not specified"
     description = request.form.get("description").strip() or "not specified"
@@ -47,6 +48,7 @@ def settings(username):
     else:
       user.username = username
       user.full_name = full_name
+      user.gender = gender
       user.city = city
       user.country = country
       user.meme_taste = meme_taste

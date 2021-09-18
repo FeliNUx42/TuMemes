@@ -16,15 +16,15 @@ home = Blueprint('home', __name__)
       del session["SEARCH_QUERY"]
 """
 
-def get_result(name, description, memes, min_age, max_age, country, city):
+def get_result(name, description, gender, memes, min_age, max_age, country, city):
   result = User.query
 
   if name:
     result = result.filter(User.full_name.ilike(f"%{name}%"))
   if description:
     result = result.filter(User.description.ilike(f"%{description}%"))
-  #if gender:
-  #  result = result.filter(User.gender.ilike(f"%{gender}%"))
+  if gender:
+    result = result.filter(User.gender.ilike(f"%{gender}%"))
   if memes:
     result = result.filter(User.meme_taste.ilike(f"%{memes}%"))
   if min_age and min_age.isnumeric():
@@ -48,7 +48,7 @@ def index():
   
   name = request.form.get("name")
   description = request.form.get("description")
-  #gender = request.form.get("gender")
+  gender = request.form.get("gender")
   memes = request.form.get("memes")
   min_age = request.form.get("min-age")
   max_age = request.form.get("max-age")
@@ -61,6 +61,7 @@ def index():
   new_query = {
     "name":name,
     "description":description,
+    "gender":gender,
     "memes":memes,
     "min_age":min_age,
     "max_age":max_age,

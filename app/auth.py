@@ -41,6 +41,7 @@ def signup():
     email = request.form.get('email').strip()
     username = request.form.get('username').strip()
     full_name = request.form.get('full-name').strip()
+    gender = request.form.get('gender').strip()
     birthday = request.form.get('birthday').strip()
     password1 = request.form.get('password-1').strip()
     password2 = request.form.get('password-2').strip()
@@ -62,6 +63,7 @@ def signup():
       user.email = email
       user.username = username
       user.full_name = full_name
+      if gender: user.gender = gender
       user.birthday = date.fromisoformat(birthday)
       user.password = password1
 

@@ -66,6 +66,7 @@ class User(db.Model, UserMixin):
   username = db.Column(db.String(128), unique=True)
   full_name = db.Column(db.String(128))
   birthday = db.Column(db.Date)
+  gender = db.Column(db.String(512), default="not specified")
   description = db.Column(db.String(1000), default="not specified")
   meme_taste = db.Column(db.String(512), default="not specified")
   country = db.Column(db.String(100), default="not specified")
