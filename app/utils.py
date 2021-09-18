@@ -14,7 +14,10 @@ import re
 
 def valid_email(email):
   pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
-  return re.search(pattern, email)
+  type = re.search(pattern, email)
+  user = User.query.filter_by(email=email).first()
+
+  return not user and type
 
 def valid_picture(file):
   extensions = (".png", ".jpg", ".jpeg")

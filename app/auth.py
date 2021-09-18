@@ -5,7 +5,7 @@ import re
 from .models import User
 from .utils import valid_date, valid_email
 from .email import send_confirm_email, send_reset_email
-from . import db
+from . import db, recaptcha
 
 
 auth = Blueprint('auth', __name__)
@@ -36,7 +36,7 @@ def login():
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
   if current_user.is_authenticated:
-    return render_template("profile.prof", username=current_user.username)
+    return redirect(url_for("profile.prof", username=current_user.username))
   
   if request.method == "POST":
     email = request.form.get('email').strip()
@@ -47,14 +47,16 @@ def signup():
     password1 = request.form.get('password-1').strip()
     password2 = request.form.get('password-2').strip()
 
-    if not valid_email(email):
+    if not recaptcha.verify():
+      flash("Please fill out the ReCaptcha!", category="error")
+    elif not valid_email(email):
       flash("This email is invalid or already exists. Try another one.", category="error")
     elif False: # valid_username()
       flash("This username already exists. Try another one.", category="error")
     elif not re.search(r"\S{2,}", full_name):
       flash("Name is too short.", category="error")
     elif not valid_date(birthday):
-      flash("Error while reading date of birth. Try again.")
+      flash("Error while reading date of birth. Try again.", 'error')
     elif len(password1) < 8:
       pass
     elif password1 != password2:
