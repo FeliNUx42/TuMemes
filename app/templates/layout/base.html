@@ -101,6 +101,13 @@
           </div>
         </a>
       </li>
+      <li>
+        <a href="{{ url_for('profile.settings', username=current_user.username) }}">
+          <div><i class="fas fa-user-slash"></i>
+            <p>Delete Account</p>
+          </div>
+        </a>
+      </li>
     </ul>
   </aside>      
   {% endif %}

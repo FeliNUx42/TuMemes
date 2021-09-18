@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 import re
 from .models import Match, Message, User, Like
-from .utils import save_file, valid_picture
+from .utils import save_file, valid_picture, confirmed_required
 from . import db
 
 profile = Blueprint('profile', __name__)
@@ -15,6 +15,7 @@ def prof(username):
 
 @profile.route('/<username>/settings', methods=['GET', 'POST'])
 @fresh_login_required
+@confirmed_required
 def settings(username):
   user = User.query.filter_by(username=username).first_or_404()
 
@@ -97,6 +98,7 @@ def settings(username):
 
 @profile.route('/<username>/like', methods=['POST'])
 @login_required
+@confirmed_required
 def like(username):
   user = User.query.filter_by(username=username).first_or_404()
 
@@ -123,6 +125,7 @@ def like(username):
 
 @profile.route('/<username>/likes')
 @login_required
+@confirmed_required
 def likes(username):
   page = request.args.get("page", 1, type=int)
   user = User.query.filter_by(username=username).first_or_404()
@@ -136,6 +139,7 @@ def likes(username):
 
 @profile.route('/<username>/inbox', methods=["GET", "POST"])
 @login_required
+@confirmed_required
 def inbox(username):
   user = User.query.filter_by(username=username).first_or_404()
 
@@ -171,6 +175,7 @@ def inbox(username):
 
 @profile.route('/<username>/matches')
 @login_required
+@confirmed_required
 def matches(username):
   page = request.args.get("page", 1, type=int)
   user = User.query.filter_by(username=username).first_or_404()

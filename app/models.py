@@ -73,6 +73,7 @@ class User(db.Model, UserMixin):
   city = db.Column(db.String(100), default="not specified")
   created = db.Column(db.DateTime(), default=datetime.utcnow)
   last_online = db.Column(db.DateTime(), default=datetime.utcnow)
+  confirmed = db.Column(db.Boolean, default=False)
   profile_pic = db.Column(db.String(255), default="default.png")
   password_hash = db.Column(db.String(128))
 
@@ -171,6 +172,19 @@ class User(db.Model, UserMixin):
     today = datetime.utcnow()
     return today.year - self.birthday.year - \
       ((today.month, today.day) < (self.birthday.month, self.birthday.day))
+
+  def get_token(self, command, expire_sec=1800):
+    s = Serializer(current_app.config['SECRET_KEY'], expire_sec)
+    return s.dumps({'user_id': self.id, 'command': command}).decode('utf-8')
+  
+  @staticmethod
+  def verify_token(token):
+    s = Serializer(current_app.config['SECRET_KEY'])
+    try:
+      data = s.loads(token)
+    except:
+      return None, None
+    return User.query.get(data['user_id']), data['command']
 
   def __repr__(self):
     return f'<User({self.id}, {self.username}, {self.email})>'

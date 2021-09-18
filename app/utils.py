@@ -1,7 +1,9 @@
-from flask import current_app
+from flask import current_app, flash, redirect, url_for
+from flask_login import current_user
 from .models import User
 from . import db
 from string import ascii_letters
+from functools import wraps
 from datetime import date
 from uuid import uuid4
 from PIL import Image
@@ -48,7 +50,11 @@ def create_user():
   u = User()
   f = names.get_first_name()
   l = names.get_last_name()
-  u.email = f"{f}.{l}@gmail.mom"
+  if current_app.config["AUTO_CONFIRM"]:
+    u.email = f"{f}.{l}@gmail.mom"
+    u.confirmed = True
+  else:
+    u.email = current_app.config["MAIL_USERNAME"]
   u.username = f"{f}-{l}"
   u.full_name = f"{f} {l}"
   u.birthday = date(2001, 1, 1)
@@ -56,3 +62,13 @@ def create_user():
 
   db.session.add(u)
   db.session.commit()
+
+def confirmed_required(func):
+  @wraps(func)
+  def decorated_function(*args, **kwargs):
+    if not current_user.confirmed:
+      flash('Please confirm your account!', 'error')
+      return redirect(url_for('auth.unconfirmed'))
+    return func(*args, **kwargs)
+
+  return decorated_function
