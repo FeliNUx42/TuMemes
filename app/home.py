@@ -84,3 +84,26 @@ def about():
 @home.route("/contact")
 def contact():
   return "contact"
+
+@home.route("/sitemap")
+@home.route("/sitemap.xml")
+def sitemap():
+  server_name = f"{request.scheme}://{request.host}"
+
+  pages = []
+
+  lastmod = datetime.now() - timedelta(days=10)
+  lastmod = lastmod.strftime('%Y-%m-%d')
+  for rule in current_app.url_map.iter_rules():
+    if 'GET' in rule.methods and len(rule.arguments) == 0 and not rule.endpoint.startswith("auth."):
+      pages.append([server_name + rule.rule, lastmod])
+  
+  users = User.query.all()
+  for user in users:
+    url = server_name + url_for('profile.prof', username=user.username)
+    pages.append([url, lastmod])
+
+  sitemap_template = render_template('main/sitemap.xml', pages=pages)
+  response = make_response(sitemap_template)
+  response.headers['Content-Type'] = 'application/xml'
+  return response

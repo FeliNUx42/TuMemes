@@ -3,7 +3,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 from datetime import date
 import re
 from .models import User
-from .utils import valid_date, valid_email
+from .utils import valid_date, valid_email, valid_username
 from .email import send_confirm_email, send_reset_email
 from . import db, recaptcha
 
@@ -51,7 +51,7 @@ def signup():
       flash("Please fill out the ReCaptcha!", category="error")
     elif not valid_email(email):
       flash("This email is invalid or already exists. Try another one.", category="error")
-    elif False: # valid_username()
+    elif not valid_username(username):
       flash("This username already exists. Try another one.", category="error")
     elif not re.search(r"\S{2,}", full_name):
       flash("Name is too short.", category="error")

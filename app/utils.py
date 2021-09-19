@@ -12,6 +12,21 @@ import names
 import re
 
 
+def valid_username(username, id=0):
+  from .models import User
+
+  user = User.query.filter_by(username=username).first()
+  pages = list(current_app.url_map.iter_rules())
+  _pages = [p.rule.split("/")[-1] for p in pages if not p.arguments]
+  
+  if user and user.id != id:
+    return False
+
+  if username in _pages or "/" in username:
+    return False
+
+  return True
+
 def valid_email(email):
   pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
   type = re.search(pattern, email)

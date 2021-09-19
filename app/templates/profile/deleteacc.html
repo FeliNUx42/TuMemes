@@ -1,0 +1,12 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<form method="POST">
+  <h1 class="danger">Do you really want to delete this account <b>({{ author.username }})</b>?</h1>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button type="submit" name="yes" class="btn-submit">Yes</button>
+  <button type="submit" name="no" class="btn-submit danger">No</button>
+</form>
+{% endblock %}

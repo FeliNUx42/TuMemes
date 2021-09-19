@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 import re
+import os
 from .models import Match, Message, User, Like
-from .utils import save_file, valid_picture, confirmed_required
+from .utils import save_file, valid_picture, confirmed_required, valid_username
+from .email import send_delete_email
 from . import db
 
 profile = Blueprint('profile', __name__)
@@ -40,7 +42,7 @@ def settings(username):
     password1 = request.form.get("password-1")
     password2 = request.form.get("password-2")
 
-    if False: # valid_username()
+    if not valid_username(username, user.id):
       flash("This username already exists. Try another one.", category="error")
     elif not re.search(r"\S{2,}", full_name):
       flash("Name is too short.", category="error")
@@ -187,3 +189,79 @@ def matches(username):
   matches = matches.order_by(Match.timestamp.desc()).paginate(page, current_app.config['RESULTS_PER_PAGE'], True)
 
   return render_template("profile/matches.html", matches=matches)
+
+@profile.route('/<username>/delete-account')
+@login_required
+@confirmed_required
+def deleteacc(username):
+  user = User.query.filter_by(username=username).first_or_404()
+  
+  if user != current_user:
+    abort(403)
+
+  send_delete_email(user)
+  flash('An email has been sent with instructions to delete your account.', category='success')
+
+  return redirect(url_for("profile.prof", username=user.username))
+
+@profile.route('/<username>/delete-account/<token>', methods=['GET', 'POST'])
+@login_required
+@confirmed_required
+def delete_confirm(username, token):
+  _user = User.query.filter_by(username=username).first_or_404()
+  user, command = User.verify_token(token)
+  if user is None or command != 'delete-account':
+    flash('That is an expired or invalid token.', category='error')
+    return redirect(url_for('profile.deleteacc', username=_user.username))
+  
+  if user != current_user or user != _user:
+    abort(403)
+
+  if request.method == "POST":
+    delete = request.form.get('yes')
+    if delete is None:
+      return redirect(url_for("profile.prof", username=user.username))
+    
+    logout_user()
+
+    for l in user.like_inbox.all():
+      db.session.delete(l)
+    
+    for l in user.like_sent.all():
+      db.session.delete(l)
+    
+    for m in user.match_1.all():
+      db.session.delete(m)
+    
+    for m in user.match_2.all():
+      db.session.delete(m)
+    
+    for msg in user.msg_inbox.all():
+      db.session.delete(msg)
+    
+    for msg in user.msg_sent.all():
+      db.session.delete(msg)
+
+    img_path = os.path.join(current_app.root_path, current_app.config["PROFILE_PICTURE_FOLDER"], user.profile_pic)
+    if not img_path.endswith("/default.png"):
+      os.remove(img_path)
+    
+    meme_1 = os.path.join(current_app.root_path, current_app.config["MEME_PICTURE_FOLDER"], user.meme_1)
+    if not meme_1.endswith("/meme.png"):
+      os.remove(meme_1)
+    
+    meme_2 = os.path.join(current_app.root_path, current_app.config["MEME_PICTURE_FOLDER"], user.meme_2)
+    if not meme_2.endswith("/meme.png"):
+      os.remove(meme_2)
+    
+    meme_3 = os.path.join(current_app.root_path, current_app.config["MEME_PICTURE_FOLDER"], user.meme_3)
+    if not meme_3.endswith("/meme.png"):
+      os.remove(meme_3)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    flash('Account deleted successfully!', category='success')
+    return redirect(url_for('home.index'))
+
+  return render_template("profile/deleteacc.html", author=user)
