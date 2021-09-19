@@ -21,7 +21,7 @@ class Config:
   MAIL_USERNAME = os.environ.get("MAIL_USER")
   MAIL_PASSWORD = os.environ.get("MAIL_PASS")
 
-  AUTO_CONFIRM = False
+  AUTO_CONFIRM = True
 
   RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY")
   RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY")
