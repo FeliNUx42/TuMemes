@@ -6,7 +6,7 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_recaptcha import ReCaptcha
-from datetime import date
+from flask_talisman import Talisman
 from .config import Config
 
 
@@ -16,6 +16,7 @@ migrate = Migrate()
 moment = Moment()
 csrf = CSRFProtect()
 recaptcha = ReCaptcha()
+talisman = Talisman()
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
@@ -89,6 +90,8 @@ def create_app():
   login_manager.init_app(app)
   csrf.init_app(app)
   recaptcha.init_app(app)
+  if app.config["HEROKU"]:
+    talisman.init_app(app)
 
   from .home import home
   from .auth import auth

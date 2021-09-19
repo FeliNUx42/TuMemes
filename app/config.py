@@ -22,6 +22,7 @@ class Config:
   MAIL_PASSWORD = os.environ.get("MAIL_PASS")
 
   AUTO_CONFIRM = True
+  HEROKU = "DYNO" in os.environ
 
   RECAPTCHA_SITE_KEY = os.environ.get("RECAPTCHA_SITE_KEY")
   RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY")
